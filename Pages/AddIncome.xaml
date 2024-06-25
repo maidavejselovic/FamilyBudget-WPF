@@ -1,0 +1,74 @@
+﻿<Page x:Class="FamilyBudgetApp.Pages.AddIncome"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FamilyBudgetApp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AddIncome">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <Frame Grid.Column="0" x:Name="NavbarFrame"/>
+
+        <StackPanel Background="#dfeeed" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="100 10 100 0">
+                    <TextBlock Text="Dodajte svoje prihode" Margin="10"  Foreground="#5eac9c" FontWeight="DemiBold" FontSize="20" TextAlignment="Center" />
+                    <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
+                        <Grid>
+                            <TextBlock x:Name="amount_block" Text="Iznos" Background="#f9fcfb" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="amount_MouseDown"/>
+                            <TextBox x:Name="amount_box" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" TextChanged="amount_TextChanged"/>
+                        </Grid>
+                    </Border>
+                    <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
+                        <Grid>
+                            <TextBlock x:Name="category_block" Text="Kategorija" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="category_MouseDown" Visibility="Visible"/>
+                            <ComboBox x:Name="category_comboBox" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" IsEditable="True" Loaded="CategoryComboBox_Loaded"  Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+                    <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
+                        <Grid>
+                            <TextBlock x:Name="date_block" Text="Izaberite datum" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="date_MouseDown" Visibility="Visible"/>
+                            <DatePicker x:Name="date_picker" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" SelectedDateChanged="date_SelectedDateChanged" Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+                    <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
+                        <Grid>
+                            <TextBlock x:Name="description_block" Text="Opis" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="description_MouseDown" Visibility="Visible"/>
+                            <TextBox x:Name="description_box" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" TextChanged="description_TextChanged"/>
+                        </Grid>
+                    </Border>
+                    <Border VerticalAlignment="Top" Height="40" Width="200" CornerRadius="10">
+                        <Button Content="Sačuvaj" Style="{StaticResource buttonView3}" Click="SaveButton_Click"></Button>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="10 50 10 0">
+                    <DataGrid x:Name="incomeDataGrid" AutoGenerateColumns="False"
+                              IsReadOnly="True" 
+                              HeadersVisibility="Column"
+                              Margin="10"
+                              RowHeight="25" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Kategorija" Binding="{Binding category}" Width="*"/>
+                            <DataGridTextColumn Header="Opis" Binding="{Binding description}" Width="*"/>
+                            <DataGridTextColumn Header="Datum" Binding="{Binding date, StringFormat=dd.MM.yyyy}" Width="*"/>
+                            <DataGridTextColumn Header="Iznos" Binding="{Binding amount}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>

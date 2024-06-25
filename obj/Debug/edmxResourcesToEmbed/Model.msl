@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="budgetModelStoreContainer" CdmEntityContainer="budgetEntities">
+    <EntitySetMapping Name="Expenses">
+      <EntityTypeMapping TypeName="budgetModel.Expense">
+        <MappingFragment StoreEntitySet="Expense">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Families">
+      <EntityTypeMapping TypeName="budgetModel.Family">
+        <MappingFragment StoreEntitySet="Family">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="familyName" ColumnName="familyName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FamilyBudgets">
+      <EntityTypeMapping TypeName="budgetModel.FamilyBudget">
+        <MappingFragment StoreEntitySet="FamilyBudget">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="familyId" ColumnName="familyId" />
+          <ScalarProperty Name="totalExpenses" ColumnName="totalExpenses" />
+          <ScalarProperty Name="totalIncome" ColumnName="totalIncome" />
+          <ScalarProperty Name="budget" ColumnName="budget" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Incomes">
+      <EntityTypeMapping TypeName="budgetModel.Income">
+        <MappingFragment StoreEntitySet="Income">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Members">
+      <EntityTypeMapping TypeName="budgetModel.Member">
+        <MappingFragment StoreEntitySet="Member">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
+          <ScalarProperty Name="familyId" ColumnName="familyId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberBudgets">
+      <EntityTypeMapping TypeName="budgetModel.MemberBudget">
+        <MappingFragment StoreEntitySet="MemberBudget">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+          <ScalarProperty Name="totalExpenses" ColumnName="totalExpenses" />
+          <ScalarProperty Name="totalIncome" ColumnName="totalIncome" />
+          <ScalarProperty Name="budget" ColumnName="budget" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SavingGoals">
+      <EntityTypeMapping TypeName="budgetModel.SavingGoal">
+        <MappingFragment StoreEntitySet="SavingGoal">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="goalAmount" ColumnName="goalAmount" />
+          <ScalarProperty Name="currentAmount" ColumnName="currentAmount" />
+          <ScalarProperty Name="targetDate" ColumnName="targetDate" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
