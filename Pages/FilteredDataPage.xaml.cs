@@ -13,6 +13,8 @@ namespace FamilyBudgetApp.Pages
         public FilteredDataPage(Member member)
         {
             InitializeComponent();
+            DataContext = new FamilyBudgetApp.ViewModels.MainViewModel(); // Postavljanje DataContext-a na instancu MainViewModel-a
+
             _member = member;
             LoadNavbar();
             LoadCategories();

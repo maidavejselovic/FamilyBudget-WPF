@@ -42,7 +42,7 @@
                     <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
                         <Grid>
                             <TextBlock x:Name="date_block" Text="Izaberite datum" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="date_MouseDown" Visibility="Visible"/>
-                            <DatePicker x:Name="date_picker" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" SelectedDateChanged="date_SelectedDateChanged" Visibility="Collapsed"/>
+                            <DatePicker x:Name="date_picker" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" SelectedDateChanged="date_SelectedDateChanged" Visibility="Collapsed" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}"/>
                         </Grid>
                     </Border>
                     <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">

@@ -23,6 +23,9 @@ namespace FamilyBudgetApp.Pages
     {
         private Member _member;
         private List<string> _categories;
+        public DateTime MinDate { get; set; }
+        public DateTime MaxDate { get; set; }
+
 
         public AddIncome(Member member)
         {
@@ -31,6 +34,11 @@ namespace FamilyBudgetApp.Pages
             LoadNavbar();
             LoadIncomeData(); // Dodaj ovu liniju za učitavanje podataka
             LoadCategories();
+
+            MaxDate = DateTime.Today;
+            MinDate = DateTime.Today.AddDays(-30);
+            // Postavite DataContext za ovu stranicu da omogućite Binding
+            this.DataContext = this;
         }
 
         private void LoadNavbar()

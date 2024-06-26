@@ -44,19 +44,8 @@ namespace FamilyBudgetApp.Pages
             AddFamily addFamily = new AddFamily();
             if (addFamily.ShowDialog() == true)
             {
-                string familyName = addFamily.FamilyName;
-                string errorMessage;
-
-                if (DatabaseManager.AddFamily(familyName, out errorMessage))
-                {
-                    MessageBox.Show("Porodica uspešno dodataaaaaa!", "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
-                    familyNameComboBox.ItemsSource = null; // Očistite trenutnu listu
-                    LoadFamilyNames(); // Osvežavanje liste porodica
-                }
-                else
-                {
-                    MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                LoadFamilyNames(); // Ponovo učitajte porodice
+                familyNameComboBox.SelectedItem = addFamily.FamilyName; // Odaberite novu porodicu
             }
         }
 
