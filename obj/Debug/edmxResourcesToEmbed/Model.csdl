@@ -11,6 +11,7 @@
     <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="memberId" Type="Int32" />
     <NavigationProperty Name="Member" Relationship="Self.FK__Expense__memberI__3C69FB99" FromRole="Expense" ToRole="Member" />
+    <NavigationProperty Name="MemberExpenses" Relationship="Self.FK_MemberExpense_Expense" FromRole="Expense" ToRole="MemberExpense" />
   </EntityType>
   <EntityType Name="Family">
     <Key>
@@ -61,6 +62,7 @@
     <NavigationProperty Name="Incomes" Relationship="Self.FK__Income__memberId__3F466844" FromRole="Member" ToRole="Income" />
     <NavigationProperty Name="MemberBudgets" Relationship="Self.FK__MemberBud__membe__4E88ABD4" FromRole="Member" ToRole="MemberBudget" />
     <NavigationProperty Name="SavingGoals" Relationship="Self.FK__SavingGoa__membe__4316F928" FromRole="Member" ToRole="SavingGoal" />
+    <NavigationProperty Name="MemberExpenses" Relationship="Self.FK_MemberExpense_Member" FromRole="Member" ToRole="MemberExpense" />
   </EntityType>
   <EntityType Name="MemberBudget">
     <Key>
@@ -72,6 +74,18 @@
     <Property Name="totalIncome" Type="Double" />
     <Property Name="budget" Type="Double" />
     <NavigationProperty Name="Member" Relationship="Self.FK__MemberBud__membe__4E88ABD4" FromRole="MemberBudget" ToRole="Member" />
+  </EntityType>
+  <EntityType Name="MemberExpense">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="memberId" Type="Int32" Nullable="false" />
+    <Property Name="expenseId" Type="Int32" Nullable="false" />
+    <Property Name="sharePercentage" Type="Double" Nullable="false" />
+    <Property Name="amount" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Expense" Relationship="Self.FK_MemberExpense_Expense" FromRole="MemberExpense" ToRole="Expense" />
+    <NavigationProperty Name="Member" Relationship="Self.FK_MemberExpense_Member" FromRole="MemberExpense" ToRole="Member" />
   </EntityType>
   <EntityType Name="SavingGoal">
     <Key>
@@ -94,6 +108,18 @@
       </Principal>
       <Dependent Role="Expense">
         <PropertyRef Name="memberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberExpense_Expense">
+    <End Role="Expense" Type="Self.Expense" Multiplicity="1" />
+    <End Role="MemberExpense" Type="Self.MemberExpense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Expense">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberExpense">
+        <PropertyRef Name="expenseId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -157,6 +183,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_MemberExpense_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="MemberExpense" Type="Self.MemberExpense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberExpense">
+        <PropertyRef Name="memberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="budgetEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Expenses" EntityType="Self.Expense" />
     <EntitySet Name="Families" EntityType="Self.Family" />
@@ -164,10 +202,15 @@
     <EntitySet Name="Incomes" EntityType="Self.Income" />
     <EntitySet Name="Members" EntityType="Self.Member" />
     <EntitySet Name="MemberBudgets" EntityType="Self.MemberBudget" />
+    <EntitySet Name="MemberExpenses" EntityType="Self.MemberExpense" />
     <EntitySet Name="SavingGoals" EntityType="Self.SavingGoal" />
     <AssociationSet Name="FK__Expense__memberI__3C69FB99" Association="Self.FK__Expense__memberI__3C69FB99">
       <End Role="Member" EntitySet="Members" />
       <End Role="Expense" EntitySet="Expenses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberExpense_Expense" Association="Self.FK_MemberExpense_Expense">
+      <End Role="Expense" EntitySet="Expenses" />
+      <End Role="MemberExpense" EntitySet="MemberExpenses" />
     </AssociationSet>
     <AssociationSet Name="FK__FamilyBud__famil__48CFD27E" Association="Self.FK__FamilyBud__famil__48CFD27E">
       <End Role="Family" EntitySet="Families" />
@@ -188,6 +231,10 @@
     <AssociationSet Name="FK__SavingGoa__membe__4316F928" Association="Self.FK__SavingGoa__membe__4316F928">
       <End Role="Member" EntitySet="Members" />
       <End Role="SavingGoal" EntitySet="SavingGoals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberExpense_Member" Association="Self.FK_MemberExpense_Member">
+      <End Role="Member" EntitySet="Members" />
+      <End Role="MemberExpense" EntitySet="MemberExpenses" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

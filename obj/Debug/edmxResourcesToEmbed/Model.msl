@@ -69,6 +69,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MemberExpenses">
+      <EntityTypeMapping TypeName="budgetModel.MemberExpense">
+        <MappingFragment StoreEntitySet="MemberExpense">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+          <ScalarProperty Name="expenseId" ColumnName="expenseId" />
+          <ScalarProperty Name="sharePercentage" ColumnName="sharePercentage" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SavingGoals">
       <EntityTypeMapping TypeName="budgetModel.SavingGoal">
         <MappingFragment StoreEntitySet="SavingGoal">

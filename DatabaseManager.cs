@@ -602,7 +602,67 @@ namespace FamilyBudgetApp
             return categories;
         }
 
+        public static bool AddMemberExpenses(List<MemberExpense> memberExpenses)
+        {
+            try
+            {
+                using (var context = new budgetEntities()) // Zamijeni sa stvarnim kontekstom baze podataka
+                {
+                    foreach (var memberExpense in memberExpenses)
+                    {
+                        // Dodaj entitet u kontekst
+                        context.MemberExpenses.Add(memberExpense);
+                    }
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Obrada izuzetka, logovanje greške, itd.
+                Console.WriteLine($"Greška prilikom dodavanja troškova članova: {ex.Message}");
+                return false;
+            }
+        }
 
+
+        // Metoda za dodavanje troška sa vraćanjem ID-ja novododatog troška
+        public static int AddExpenseAndGetId(int memberId, double amount, string category, DateTime date, string description, out string errorMessage)
+        {
+            int expenseId = 0; // Inicijalizujemo expenseId na 0
+
+            try
+            {
+                // Otvaramo konekciju sa bazom podataka (pretpostavka: koristimo Entity Framework ili sličan ORM)
+                using (var db = new budgetEntities())
+                {
+                    // Kreiramo novi objekat troška
+                    Expense newExpense = new Expense
+                    {
+                        memberId = memberId,
+                        amount = amount,
+                        category = category,
+                        date = date,
+                        description = description
+                    };
+
+                    // Dodajemo trošak u bazu podataka
+                    db.Expenses.Add(newExpense);
+                    db.SaveChanges(); // Čuvamo promene kako bismo dobili ID novododatog troška
+
+                    // Dohvatamo ID novododatog troška
+                    expenseId = newExpense.id;
+                }
+
+                errorMessage = null; // Nema greške ako je dodavanje uspelo
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Greška prilikom dodavanja troška: " + ex.Message;
+            }
+
+            return expenseId;
+        }
     }
 }
 

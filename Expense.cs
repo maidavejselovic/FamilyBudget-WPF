@@ -14,6 +14,12 @@ namespace FamilyBudgetApp
     
     public partial class Expense
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Expense()
+        {
+            this.MemberExpenses = new HashSet<MemberExpense>();
+        }
+    
         public int id { get; set; }
         public double amount { get; set; }
         public string category { get; set; }
@@ -22,5 +28,7 @@ namespace FamilyBudgetApp
         public Nullable<int> memberId { get; set; }
     
         public virtual Member Member { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MemberExpense> MemberExpenses { get; set; }
     }
 }

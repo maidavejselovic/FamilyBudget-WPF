@@ -31,6 +31,7 @@ namespace FamilyBudgetApp
         public virtual DbSet<Income> Incomes { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<MemberBudget> MemberBudgets { get; set; }
+        public virtual DbSet<MemberExpense> MemberExpenses { get; set; }
         public virtual DbSet<SavingGoal> SavingGoals { get; set; }
     }
 }

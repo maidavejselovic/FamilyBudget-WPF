@@ -62,6 +62,16 @@
     <Property Name="totalIncome" Type="float" />
     <Property Name="budget" Type="float" />
   </EntityType>
+  <EntityType Name="MemberExpense">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="memberId" Type="int" Nullable="false" />
+    <Property Name="expenseId" Type="int" Nullable="false" />
+    <Property Name="sharePercentage" Type="float" Nullable="false" />
+    <Property Name="amount" Type="float" Nullable="false" />
+  </EntityType>
   <EntityType Name="SavingGoal">
     <Key>
       <PropertyRef Name="id" />
@@ -145,6 +155,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_MemberExpense_Expense">
+    <End Role="Expense" Type="Self.Expense" Multiplicity="1" />
+    <End Role="MemberExpense" Type="Self.MemberExpense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Expense">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberExpense">
+        <PropertyRef Name="expenseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberExpense_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="MemberExpense" Type="Self.MemberExpense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberExpense">
+        <PropertyRef Name="memberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="budgetModelStoreContainer">
     <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Family" EntityType="Self.Family" Schema="dbo" store:Type="Tables" />
@@ -152,6 +186,7 @@
     <EntitySet Name="Income" EntityType="Self.Income" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberBudget" EntityType="Self.MemberBudget" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MemberExpense" EntityType="Self.MemberExpense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SavingGoal" EntityType="Self.SavingGoal" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__Expense__memberI__3C69FB99" Association="Self.FK__Expense__memberI__3C69FB99">
       <End Role="Member" EntitySet="Member" />
@@ -176,6 +211,14 @@
     <AssociationSet Name="FK__SavingGoa__membe__4316F928" Association="Self.FK__SavingGoa__membe__4316F928">
       <End Role="Member" EntitySet="Member" />
       <End Role="SavingGoal" EntitySet="SavingGoal" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberExpense_Expense" Association="Self.FK_MemberExpense_Expense">
+      <End Role="Expense" EntitySet="Expense" />
+      <End Role="MemberExpense" EntitySet="MemberExpense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberExpense_Member" Association="Self.FK_MemberExpense_Member">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="MemberExpense" EntitySet="MemberExpense" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

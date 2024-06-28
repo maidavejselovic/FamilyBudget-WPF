@@ -4,20 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="11bfed4370834ec9b1a7cc00bf4638c2" Name="Diagram1">
+      <Diagram DiagramId="80211cf126be48db8292330616fb60f8" Name="Diagram1">
         <EntityTypeShape EntityType="budgetModel.Expense" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="budgetModel.Family" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="budgetModel.FamilyBudget" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="budgetModel.Income" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.Family" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.FamilyBudget" Width="1.5" PointX="1.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.Income" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="budgetModel.Member" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="budgetModel.MemberBudget" Width="1.5" PointX="5.25" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="budgetModel.SavingGoal" Width="1.5" PointX="5.25" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.MemberBudget" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.MemberExpense" Width="1.5" PointX="7.5" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="budgetModel.SavingGoal" Width="1.5" PointX="5.25" PointY="13.875" IsExpanded="true" />
         <AssociationConnector Association="budgetModel.FK__Expense__memberI__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="budgetModel.FK_MemberExpense_Expense" ManuallyRouted="false" />
         <AssociationConnector Association="budgetModel.FK__FamilyBud__famil__48CFD27E" ManuallyRouted="false" />
         <AssociationConnector Association="budgetModel.FK__Member__familyId__398D8EEE" ManuallyRouted="false" />
         <AssociationConnector Association="budgetModel.FK__Income__memberId__3F466844" ManuallyRouted="false" />
         <AssociationConnector Association="budgetModel.FK__MemberBud__membe__4E88ABD4" ManuallyRouted="false" />
         <AssociationConnector Association="budgetModel.FK__SavingGoa__membe__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="budgetModel.FK_MemberExpense_Member" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

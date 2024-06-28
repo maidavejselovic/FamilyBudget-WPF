@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FamilyBudgetApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,7 +14,7 @@ namespace FamilyBudgetApp.Pages
         public FilteredDataPage(Member member)
         {
             InitializeComponent();
-            DataContext = new FamilyBudgetApp.ViewModels.MainViewModel(); // Postavljanje DataContext-a na instancu MainViewModel-a
+            DataContext = new FilteredDataViewModel(); // Postavljanje DataContext-a na instancu FilteredDataViewModel-a
 
             _member = member;
             LoadNavbar();
