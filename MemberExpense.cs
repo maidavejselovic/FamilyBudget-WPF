@@ -13,7 +13,7 @@ namespace FamilyBudgetApp
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    public partial class MemberExpense: INotifyPropertyChanged
+    public partial class MemberExpense : INotifyPropertyChanged
     {
         public int id { get; set; }
         public int memberId { get; set; }
@@ -33,8 +33,8 @@ namespace FamilyBudgetApp
                 }
             }
         }
-        public double amount { get; set; }
-    
+        public double memberAmount { get; set; }
+
         public virtual Expense Expense { get; set; }
         public virtual Member Member { get; set; }
 

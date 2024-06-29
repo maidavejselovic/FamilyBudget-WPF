@@ -49,14 +49,7 @@ namespace FamilyBudgetApp.Pages
             string errorMessage;
             double budget = DatabaseManager.GetMemberBudget(_member.id, out errorMessage);
 
-            if (string.IsNullOrEmpty(errorMessage))
-            {
-                TotalBudgetTextBlock.Text = $"Moj budžet: \n {budget} RSD";
-            }
-            else
-            {
-                TotalBudgetTextBlock.Text = $"Greška prilikom učitavanja budžeta: {errorMessage}";
-            }
+            TotalBudgetTextBlock.Text = $"Moj budžet: \n {budget} RSD";
         }
         private void LoadTotalFamilyBudget()
         {
@@ -64,17 +57,9 @@ namespace FamilyBudgetApp.Pages
             if (_member.familyId != null)
             {
                 int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
-
                 double familyBudget = DatabaseManager.GetFamilyBudget(familyId, out errorMessage);
 
-                if (string.IsNullOrEmpty(errorMessage))
-                {
-                    TotalFamilyBudgetTextBlock.Text = $"Porodični budžet: \n {familyBudget} RSD";
-                }
-                else
-                {
-                    TotalFamilyBudgetTextBlock.Text = $"Greška prilikom učitavanja budžeta: {errorMessage}";
-                }
+                TotalFamilyBudgetTextBlock.Text = $"Porodični budžet: \n {familyBudget} RSD"; 
             }
         }
 

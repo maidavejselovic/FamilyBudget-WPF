@@ -70,7 +70,7 @@
     <Property Name="memberId" Type="int" Nullable="false" />
     <Property Name="expenseId" Type="int" Nullable="false" />
     <Property Name="sharePercentage" Type="float" Nullable="false" />
-    <Property Name="amount" Type="float" Nullable="false" />
+    <Property Name="memberAmount" Type="float" Nullable="false" />
   </EntityType>
   <EntityType Name="SavingGoal">
     <Key>
@@ -83,7 +83,7 @@
     <Property Name="description" Type="text" />
     <Property Name="memberId" Type="int" />
   </EntityType>
-  <Association Name="FK__Expense__memberI__3C69FB99">
+  <Association Name="FK__Expense__memberI__5CD6CB2B">
     <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
     <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
     <ReferentialConstraint>
@@ -188,7 +188,7 @@
     <EntitySet Name="MemberBudget" EntityType="Self.MemberBudget" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberExpense" EntityType="Self.MemberExpense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SavingGoal" EntityType="Self.SavingGoal" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Expense__memberI__3C69FB99" Association="Self.FK__Expense__memberI__3C69FB99">
+    <AssociationSet Name="FK__Expense__memberI__5CD6CB2B" Association="Self.FK__Expense__memberI__5CD6CB2B">
       <End Role="Member" EntitySet="Member" />
       <End Role="Expense" EntitySet="Expense" />
     </AssociationSet>

@@ -174,44 +174,35 @@ namespace FamilyBudgetApp.Pages
 
             int memberId = _member.id;
 
-            int expenseId = DatabaseManager.AddExpense(memberId, amount, category_comboBox.Text, date, description_box.Text, out errorMessage);
+            List<MemberExpense> memberExpenses = new List<MemberExpense>();
 
-            if (expenseId > 0)
+            foreach (MemberExpense memberExpense in MemberExpenses)
             {
-                List<MemberExpense> memberExpenses = new List<MemberExpense>();
+                double sharePercentage = memberExpense.sharePercentage;
+                double memberAmount = amount * (sharePercentage / 100.0);
 
-                foreach (MemberExpense memberExpense in MemberExpenses)
+                memberExpenses.Add(new MemberExpense
                 {
-                    double sharePercentage = memberExpense.sharePercentage;
-                    double memberAmount = amount * (sharePercentage / 100.0);
+                    memberId = memberExpense.memberId,
+                    sharePercentage = sharePercentage,
+                    memberAmount = memberAmount
+                });
+            }
 
-                    memberExpenses.Add(new MemberExpense
-                    {
-                        memberId = memberExpense.memberId,
-                        expenseId = expenseId,
-                        sharePercentage = sharePercentage,
-                        amount = memberAmount
-                    });
-                }
+            if (DatabaseManager.AddExpenseAndMemberExpenses(memberId, amount, category_comboBox.Text, date, description_box.Text, memberExpenses, out errorMessage))
+            {
+               // string sharePercentages = GetSharePercentagesText();
+               //MessageBox.Show($"Udeli članova:\n{sharePercentages}\n\nVaš trošak je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Vaš trošak je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                if (DatabaseManager.AddMemberExpenses(memberExpenses))
-                {
-                    string sharePercentages = GetSharePercentagesText();
-
-                    MessageBox.Show($"Udeli članova:\n{sharePercentages}\n\nVaš trošak je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    LoadExpenseData();
-                }
-                else
-                {
-                    MessageBox.Show(errorMessage ?? "Greška pri čuvanju udeljenih troškova.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                LoadExpenseData();
             }
             else
             {
-                MessageBox.Show(errorMessage ?? "Greška pri čuvanju troška.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errorMessage ?? "Greška pri čuvanju troška i udeljenih troškova.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private bool ValidateSharePercentages()
         {
@@ -223,17 +214,16 @@ namespace FamilyBudgetApp.Pages
             return totalPercentage == 100;
         }
 
-        private string GetSharePercentagesText()
-        {
-            List<string> percentages = new List<string>();
+        //private string GetSharePercentagesText()
+        //{
+        //    List<string> percentages = new List<string>();
 
-            foreach (MemberExpense memberExpense in MemberExpenses)
-            {
-                percentages.Add($"{memberExpense.Member.firstName}: {memberExpense.sharePercentage}%");
-            }
+        //    foreach (MemberExpense memberExpense in MemberExpenses)
+        //    {
+        //        percentages.Add($"{memberExpense.Member.firstName}: {memberExpense.sharePercentage}%");
+        //    }
 
-            return string.Join("\n", percentages);
-        }
-
+        //    return string.Join("\n", percentages);
+        //}
     }
 }

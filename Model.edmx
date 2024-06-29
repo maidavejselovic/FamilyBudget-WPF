@@ -75,7 +75,7 @@
           <Property Name="memberId" Type="int" Nullable="false" />
           <Property Name="expenseId" Type="int" Nullable="false" />
           <Property Name="sharePercentage" Type="float" Nullable="false" />
-          <Property Name="amount" Type="float" Nullable="false" />
+          <Property Name="memberAmount" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="SavingGoal">
           <Key>
@@ -88,7 +88,7 @@
           <Property Name="description" Type="text" />
           <Property Name="memberId" Type="int" />
         </EntityType>
-        <Association Name="FK__Expense__memberI__3C69FB99">
+        <Association Name="FK__Expense__memberI__5CD6CB2B">
           <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
           <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
           <ReferentialConstraint>
@@ -193,7 +193,7 @@
           <EntitySet Name="MemberBudget" EntityType="Self.MemberBudget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberExpense" EntityType="Self.MemberExpense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SavingGoal" EntityType="Self.SavingGoal" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Expense__memberI__3C69FB99" Association="Self.FK__Expense__memberI__3C69FB99">
+          <AssociationSet Name="FK__Expense__memberI__5CD6CB2B" Association="Self.FK__Expense__memberI__5CD6CB2B">
             <End Role="Member" EntitySet="Member" />
             <End Role="Expense" EntitySet="Expense" />
           </AssociationSet>
@@ -241,7 +241,7 @@
           <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="memberId" Type="Int32" />
-          <NavigationProperty Name="Member" Relationship="Self.FK__Expense__memberI__3C69FB99" FromRole="Expense" ToRole="Member" />
+          <NavigationProperty Name="Member" Relationship="Self.FK__Expense__memberI__5CD6CB2B" FromRole="Expense" ToRole="Member" />
           <NavigationProperty Name="MemberExpenses" Relationship="Self.FK_MemberExpense_Expense" FromRole="Expense" ToRole="MemberExpense" />
         </EntityType>
         <EntityType Name="Family">
@@ -288,7 +288,7 @@
           <Property Name="dateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="familyId" Type="Int32" />
           <Property Name="status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Expenses" Relationship="Self.FK__Expense__memberI__3C69FB99" FromRole="Member" ToRole="Expense" />
+          <NavigationProperty Name="Expenses" Relationship="Self.FK__Expense__memberI__5CD6CB2B" FromRole="Member" ToRole="Expense" />
           <NavigationProperty Name="Family" Relationship="Self.FK__Member__familyId__398D8EEE" FromRole="Member" ToRole="Family" />
           <NavigationProperty Name="Incomes" Relationship="Self.FK__Income__memberId__3F466844" FromRole="Member" ToRole="Income" />
           <NavigationProperty Name="MemberBudgets" Relationship="Self.FK__MemberBud__membe__4E88ABD4" FromRole="Member" ToRole="MemberBudget" />
@@ -314,7 +314,7 @@
           <Property Name="memberId" Type="Int32" Nullable="false" />
           <Property Name="expenseId" Type="Int32" Nullable="false" />
           <Property Name="sharePercentage" Type="Double" Nullable="false" />
-          <Property Name="amount" Type="Double" Nullable="false" />
+          <Property Name="memberAmount" Type="Double" Nullable="false" />
           <NavigationProperty Name="Expense" Relationship="Self.FK_MemberExpense_Expense" FromRole="MemberExpense" ToRole="Expense" />
           <NavigationProperty Name="Member" Relationship="Self.FK_MemberExpense_Member" FromRole="MemberExpense" ToRole="Member" />
         </EntityType>
@@ -330,7 +330,7 @@
           <Property Name="memberId" Type="Int32" />
           <NavigationProperty Name="Member" Relationship="Self.FK__SavingGoa__membe__4316F928" FromRole="SavingGoal" ToRole="Member" />
         </EntityType>
-        <Association Name="FK__Expense__memberI__3C69FB99">
+        <Association Name="FK__Expense__memberI__5CD6CB2B">
           <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
           <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
           <ReferentialConstraint>
@@ -435,7 +435,7 @@
           <EntitySet Name="MemberBudgets" EntityType="Self.MemberBudget" />
           <EntitySet Name="MemberExpenses" EntityType="Self.MemberExpense" />
           <EntitySet Name="SavingGoals" EntityType="Self.SavingGoal" />
-          <AssociationSet Name="FK__Expense__memberI__3C69FB99" Association="Self.FK__Expense__memberI__3C69FB99">
+          <AssociationSet Name="FK__Expense__memberI__5CD6CB2B" Association="Self.FK__Expense__memberI__5CD6CB2B">
             <End Role="Member" EntitySet="Members" />
             <End Role="Expense" EntitySet="Expenses" />
           </AssociationSet>
@@ -549,7 +549,7 @@
                 <ScalarProperty Name="memberId" ColumnName="memberId" />
                 <ScalarProperty Name="expenseId" ColumnName="expenseId" />
                 <ScalarProperty Name="sharePercentage" ColumnName="sharePercentage" />
-                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="memberAmount" ColumnName="memberAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

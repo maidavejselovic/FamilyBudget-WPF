@@ -251,89 +251,6 @@ namespace FamilyBudgetApp
                 return false;
             }
         }
-
-        public static int AddExpense(int memberId, double amount, string category, DateTime date, string description, out string errorMessage)
-        {
-            int expenseId = 0;
-            errorMessage = string.Empty;
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    // Pronalaženje ili dodavanje člana porodice
-                    var member = context.Members.Find(memberId);
-                    if (member == null)
-                    {
-                        errorMessage = "Član porodice nije pronađen.";
-                    }
-
-                    // Pronalaženje ili dodavanje budžeta porodice
-                    var familyBudget = context.FamilyBudgets.FirstOrDefault(fb => fb.familyId == member.familyId);
-                    if (familyBudget == null)
-                    {
-                        familyBudget = new FamilyBudget
-                        {
-                            familyId = member.familyId,
-                            totalIncome = 0,
-                            totalExpenses = 0,
-                            budget = 0
-                        };
-                        context.FamilyBudgets.Add(familyBudget);
-                    }
-
-                    // Pronalaženje ili dodavanje budžeta člana porodice
-                    var memberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberId);
-                    if (memberBudget == null)
-                    {
-                        memberBudget = new MemberBudget
-                        {
-                            memberId = memberId,
-                            totalIncome = 0,
-                            totalExpenses = 0,
-                            budget = 0
-                        };
-                        context.MemberBudgets.Add(memberBudget);
-                    }
-
-                    // Provera da li član porodice ima dovoljno prihoda za dodavanje troška
-                    //if (memberBudget.totalIncome < amount)
-                    //{
-                    //    errorMessage = "Nemate dovoljno sredstava u vašem budžetu za taj trošak.";
-                    //    return false;
-                    //}
-
-                    // Kreiranje novog troška
-                    var newExpense = new Expense
-                    {
-                        amount = amount,
-                        category = category,
-                        date = date,
-                        description = description,
-                        memberId = memberId
-                    };
-                    context.Expenses.Add(newExpense);
-
-                    // Ažuriranje budžeta porodice
-                    familyBudget.totalExpenses += amount;
-                    familyBudget.budget = familyBudget.totalIncome - familyBudget.totalExpenses;
-
-                    // Ažuriranje budžeta člana porodice
-                    memberBudget.totalExpenses += amount;
-                    memberBudget.budget = memberBudget.totalIncome - memberBudget.totalExpenses;
-
-                    context.SaveChanges();
-                    expenseId = newExpense.id;
-                }
-               // return true;
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "Greška prilikom dodavanja troška: " + ex.Message;
-                //return false;
-            }
-            return expenseId;
-        }
-
         public static List<Expense> GetExpensesForMember(int memberId)
         {
             try
@@ -481,8 +398,6 @@ namespace FamilyBudgetApp
             }
         }
 
-
-
         public static bool RejectMember(int memberId)
         {
             try
@@ -629,64 +544,94 @@ namespace FamilyBudgetApp
             return categories;
         }
 
-        //public static bool AddMemberExpenses(List<MemberExpense> memberExpenses)
-        //{
-        //    try
-        //    {
-        //        using (var context = new budgetEntities())
-        //        {
-        //            foreach (var memberExpense in memberExpenses)
-        //            {
-        //                // Dodaj entitet u kontekst
-        //                context.MemberExpenses.Add(memberExpense);
-        //            }
-        //            context.SaveChanges();
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Obrada izuzetka, logovanje greške, itd.
-        //        Console.WriteLine($"Greška prilikom dodavanja troškova članova: {ex.Message}");
-        //        return false;
-        //    }
-        //}
 
-
-        // Metoda za dodavanje troška sa vraćanjem ID-ja novododatog troška
-        public static int AddExpenseAndGetId(int memberId, double amount, string category, DateTime date, string description, out string errorMessage)
+        public static bool AddExpenseAndMemberExpenses(int memberId, double amount, string category, DateTime date, string description, List<MemberExpense> memberExpenses, out string errorMessage)
         {
-            int expenseId = 0; // Inicijalizujemo expenseId na 0
+            errorMessage = string.Empty;
 
             try
             {
-                using (var db = new budgetEntities())
+                using (var context = new budgetEntities())
                 {
-                    Expense newExpense = new Expense
+                    // Pronalaženje ili dodavanje člana porodice
+                    var member = context.Members.Find(memberId);
+                    if (member == null)
                     {
-                        memberId = memberId,
+                        errorMessage = "Član porodice nije pronađen.";
+                        return false;
+                    }
+
+                    // Pronalaženje ili dodavanje budžeta porodice
+                    var familyBudget = context.FamilyBudgets.FirstOrDefault(fb => fb.familyId == member.familyId);
+                    if (familyBudget == null)
+                    {
+                        familyBudget = new FamilyBudget
+                        {
+                            familyId = member.familyId,
+                            totalIncome = 0,
+                            totalExpenses = 0,
+                            budget = 0
+                        };
+                        context.FamilyBudgets.Add(familyBudget);
+                    }
+
+                    // Pronalaženje ili dodavanje budžeta člana porodice
+                    var memberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberId);
+                    if (memberBudget == null)
+                    {
+                        memberBudget = new MemberBudget
+                        {
+                            memberId = memberId,
+                            totalIncome = 0,
+                            totalExpenses = 0,
+                            budget = 0
+                        };
+                        context.MemberBudgets.Add(memberBudget);
+                    }
+
+                    // Kreiranje novog troška
+                    var newExpense = new Expense
+                    {
                         amount = amount,
                         category = category,
                         date = date,
-                        description = description
+                        description = description,
+                        memberId = memberId
                     };
+                    context.Expenses.Add(newExpense);
 
-                    // Dodajemo trošak u bazu podataka
-                    db.Expenses.Add(newExpense);
-                    db.SaveChanges(); // Čuvamo promene kako bismo dobili ID novododatog troška
+                    int expenseId = newExpense.id;
 
-                    // Dohvatamo ID novododatog troška
-                    expenseId = newExpense.id;
+                    foreach (var memberExpense in memberExpenses)
+                    {
+                        // Provera da li memberExpense pripada istom memberId kao i memberId u memberBudget
+                        if (memberExpense.memberId == memberId)
+                        {
+                            memberExpense.expenseId = expenseId;
+                            context.MemberExpenses.Add(memberExpense);
+
+                            // Dodavanje memberAmount na totalExpenses člana porodice
+                            memberBudget.totalExpenses += memberExpense.memberAmount;
+                        }
+                    }
+
+                    // Ažuriranje budžeta porodice
+                    familyBudget.totalExpenses += amount;
+                    familyBudget.budget = familyBudget.totalIncome - familyBudget.totalExpenses;
+
+                    // Ažuriranje budžeta člana porodice
+                    memberBudget.budget = memberBudget.totalIncome - memberBudget.totalExpenses;
+
+                    context.SaveChanges();
                 }
 
-                errorMessage = null; // Nema greške ako je dodavanje uspelo
+                return true;
             }
             catch (Exception ex)
             {
-                errorMessage = "Greška prilikom dodavanja troška: " + ex.Message;
+                errorMessage = "Greška prilikom dodavanja troška i udeljenih troškova: " + ex.Message;
+                return false;
             }
-
-            return expenseId;
         }
     }
 }

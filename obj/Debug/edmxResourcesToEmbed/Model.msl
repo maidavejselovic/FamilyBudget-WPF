@@ -76,7 +76,7 @@
           <ScalarProperty Name="memberId" ColumnName="memberId" />
           <ScalarProperty Name="expenseId" ColumnName="expenseId" />
           <ScalarProperty Name="sharePercentage" ColumnName="sharePercentage" />
-          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="memberAmount" ColumnName="memberAmount" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
