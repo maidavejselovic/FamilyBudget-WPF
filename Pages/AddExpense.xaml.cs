@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace FamilyBudgetApp.Pages
 {
@@ -13,6 +14,8 @@ namespace FamilyBudgetApp.Pages
         private Member _member;
         private List<string> _categories;
         private List<Member> Members;
+        private List<MemberExpense> MemberExpenses;
+
 
         public AddExpense(Member member)
         {
@@ -20,16 +23,25 @@ namespace FamilyBudgetApp.Pages
             _member = member;
             LoadNavbar();
             LoadExpenseData();
-            LoadFamilyMembers(); // Load members from database
+            LoadFamilyMembers();
+            LoadCategories();
 
             // Set DataContext for this page to enable Binding
             this.DataContext = this;
 
-            // Load categories on initialization
-            LoadCategories();
-
+            // Initialize MemberExpenses list
+            MemberExpenses = new List<MemberExpense>();
+            foreach (var familyMember in Members)
+            {
+                MemberExpenses.Add(new MemberExpense
+                {
+                    memberId = familyMember.id,
+                    sharePercentage = 0,//Initial value; will be updated via binding
+                    Member = familyMember // Postavljanje Member objekta
+                });
+            }
             // Set ItemsSource for membersSharesControl
-            membersSharesControl.ItemsSource = Members;
+            membersSharesControl.ItemsSource = MemberExpenses;
         }
 
         private void LoadFamilyMembers()
@@ -65,14 +77,14 @@ namespace FamilyBudgetApp.Pages
         {
             _categories = new List<string>
             {
-                "Health",
-                "Salary",
-                "Groceries",
-                "Investment",
-                "Makeup",
-                "Transportation",
-                "Gift",
-                "Other"
+               "Zdravlje",
+                "Plata",
+                "Namirnice",
+                "Investicija",
+                "Šminka",
+                "Prevoz",
+                "Poklon",
+                "Ostalo"
             };
 
             category_comboBox.ItemsSource = _categories;
@@ -131,58 +143,48 @@ namespace FamilyBudgetApp.Pages
         {
             description_block.Visibility = string.IsNullOrEmpty(description_box.Text) ? Visibility.Visible : Visibility.Collapsed;
         }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string errorMessage;
 
-            // Input validation
             if (string.IsNullOrWhiteSpace(amount_box.Text) || string.IsNullOrWhiteSpace(category_comboBox.Text) ||
                 string.IsNullOrWhiteSpace(date_picker.Text) || string.IsNullOrWhiteSpace(description_box.Text))
             {
-                MessageBox.Show("All fields must be filled.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Amount validation
             if (!double.TryParse(amount_box.Text, out double amount))
             {
-                MessageBox.Show("Amount must be a number.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Iznos mora biti broj.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Date validation
             if (!DateTime.TryParse(date_picker.Text, out DateTime date))
             {
-                MessageBox.Show("Invalid date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nevažeći datum.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            int memberId = _member.id; // Assuming _member.id is of type int
+            if (!ValidateSharePercentages())
+            {
+                MessageBox.Show("Ukupni udeo mora biti 100%.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            // Save expense in the database
-            int expenseId = DatabaseManager.AddExpenseAndGetId(memberId, amount, category_comboBox.Text, date, description_box.Text, out errorMessage);
+            int memberId = _member.id;
+
+            int expenseId = DatabaseManager.AddExpense(memberId, amount, category_comboBox.Text, date, description_box.Text, out errorMessage);
 
             if (expenseId > 0)
             {
-                // Save shares for each family member
                 List<MemberExpense> memberExpenses = new List<MemberExpense>();
 
-                foreach (MemberExpense memberExpense in memberExpenses)
+                foreach (MemberExpense memberExpense in MemberExpenses)
                 {
-                    double sharePercentage = memberExpense.sharePercentage; // Default vrednost ako je null
-
-                    // Provera da li je udeo validan
-                    if (sharePercentage < 0 || sharePercentage > 100)
-                    {
-                        MessageBox.Show("Udeo mora biti između 0% i 100%.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    // Izračunaj iznos za ovog člana
+                    double sharePercentage = memberExpense.sharePercentage;
                     double memberAmount = amount * (sharePercentage / 100.0);
 
-                    // Dodaj u listu za čuvanje u bazi
                     memberExpenses.Add(new MemberExpense
                     {
                         memberId = memberExpense.memberId,
@@ -192,18 +194,46 @@ namespace FamilyBudgetApp.Pages
                     });
                 }
 
-
-                // Save in the database
                 if (DatabaseManager.AddMemberExpenses(memberExpenses))
                 {
-                    MessageBox.Show("Vaš toršak je uspešno sačuvan", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LoadExpenseData(); // Reload expense data
+                    string sharePercentages = GetSharePercentagesText();
+
+                    MessageBox.Show($"Udeli članova:\n{sharePercentages}\n\nVaš trošak je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    LoadExpenseData();
                 }
                 else
                 {
-                    MessageBox.Show(errorMessage ?? "Greška", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(errorMessage ?? "Greška pri čuvanju udeljenih troškova.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+            else
+            {
+                MessageBox.Show(errorMessage ?? "Greška pri čuvanju troška.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
+        private bool ValidateSharePercentages()
+        {
+            double totalPercentage = 0;
+            foreach (var memberExpense in MemberExpenses)
+            {
+                totalPercentage += memberExpense.sharePercentage;
+            }
+            return totalPercentage == 100;
+        }
+
+        private string GetSharePercentagesText()
+        {
+            List<string> percentages = new List<string>();
+
+            foreach (MemberExpense memberExpense in MemberExpenses)
+            {
+                percentages.Add($"{memberExpense.Member.firstName}: {memberExpense.sharePercentage}%");
+            }
+
+            return string.Join("\n", percentages);
+        }
+
     }
 }

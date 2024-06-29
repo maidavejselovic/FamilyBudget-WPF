@@ -11,16 +11,37 @@ namespace FamilyBudgetApp
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class MemberExpense
+    using System.ComponentModel;
+
+    public partial class MemberExpense: INotifyPropertyChanged
     {
         public int id { get; set; }
         public int memberId { get; set; }
         public int expenseId { get; set; }
-        public double sharePercentage { get; set; }
+        //public double sharePercentage { get; set; }
+
+        private double sharePercentage1;
+        public double sharePercentage
+        {
+            get { return sharePercentage1; }
+            set
+            {
+                if (sharePercentage1 != value)
+                {
+                    sharePercentage1 = value;
+                    OnPropertyChanged(nameof(sharePercentage));
+                }
+            }
+        }
         public double amount { get; set; }
     
         public virtual Expense Expense { get; set; }
         public virtual Member Member { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

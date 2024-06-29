@@ -22,6 +22,7 @@ namespace FamilyBudgetApp.Pages
     public partial class Home : Page
     {
         private Member _member;
+        private Family _family;
 
         public Home(Member member)
         {
@@ -30,7 +31,7 @@ namespace FamilyBudgetApp.Pages
             LoadNavbar();
             LoadSavingGoals();
             LoadTotalBudget();
-
+            LoadTotalFamilyBudget();
         }
 
         private void LoadNavbar()
@@ -50,11 +51,30 @@ namespace FamilyBudgetApp.Pages
 
             if (string.IsNullOrEmpty(errorMessage))
             {
-                TotalBudgetTextBlock.Text = $"Ukupan budžet: \n {budget} RSD";
+                TotalBudgetTextBlock.Text = $"Moj budžet: \n {budget} RSD";
             }
             else
             {
                 TotalBudgetTextBlock.Text = $"Greška prilikom učitavanja budžeta: {errorMessage}";
+            }
+        }
+        private void LoadTotalFamilyBudget()
+        {
+            string errorMessage;
+            if (_member.familyId != null)
+            {
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
+
+                double familyBudget = DatabaseManager.GetFamilyBudget(familyId, out errorMessage);
+
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    TotalFamilyBudgetTextBlock.Text = $"Porodični budžet: \n {familyBudget} RSD";
+                }
+                else
+                {
+                    TotalFamilyBudgetTextBlock.Text = $"Greška prilikom učitavanja budžeta: {errorMessage}";
+                }
             }
         }
 

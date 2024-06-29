@@ -42,7 +42,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Grid Height="300">
+                <Grid Height="500">
                     <!-- Dodajte grafikon ovde -->
                     <lvc:CartesianChart Series="{Binding ChartSeries}" LegendLocation="Right" Margin="10">
                         <lvc:CartesianChart.AxisX>

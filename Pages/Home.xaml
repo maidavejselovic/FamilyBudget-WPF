@@ -21,12 +21,24 @@
             <Border HorizontalAlignment="Left" Height="50" Width="200" CornerRadius="10">
                 <Button Content="Dodajte cilj štednje" Style="{StaticResource buttonView2}" Click="AddSavingGoalsButton_Click"></Button>
             </Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
+                        <TextBlock x:Name="TotalBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
+                        <TextBlock x:Name="TotalFamilyBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
 
-            <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
-                <TextBlock x:Name="TotalBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Border>
-
-
+                </StackPanel>
+            </Grid>
+           
             <ItemsControl x:Name="GoalsItemsControl" Margin="10">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
