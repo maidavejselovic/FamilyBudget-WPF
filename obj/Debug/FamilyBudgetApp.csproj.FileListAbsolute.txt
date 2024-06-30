@@ -49,11 +49,13 @@ C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\FamilyBudgetApp.csproj.CoreCo
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\FamilyBudgetApp.csproj.CopyComplete
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\FamilyBudgetApp.exe
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\FamilyBudgetApp.pdb
-C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\FilteredDataPage.g.cs
-C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\FilteredDataPage.baml
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.dll
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.Wpf.dll
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.pdb
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.xml
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.Wpf.pdb
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\bin\Debug\LiveCharts.Wpf.xml
+C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\MyBudget.g.cs
+C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\MyBudget.baml
+C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\SavingsGoals.g.cs
+C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\obj\Debug\Pages\SavingsGoals.baml

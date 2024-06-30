@@ -48,7 +48,6 @@
     <Property Name="lastName" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="dateOfBirth" Type="date" Nullable="false" />
     <Property Name="familyId" Type="int" />
     <Property Name="status" Type="nvarchar" MaxLength="15" Nullable="false" />
   </EntityType>
@@ -69,6 +68,16 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="memberId" Type="int" Nullable="false" />
     <Property Name="expenseId" Type="int" Nullable="false" />
+    <Property Name="sharePercentage" Type="float" Nullable="false" />
+    <Property Name="memberAmount" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberIncome">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="memberId" Type="int" Nullable="false" />
+    <Property Name="incomeId" Type="int" Nullable="false" />
     <Property Name="sharePercentage" Type="float" Nullable="false" />
     <Property Name="memberAmount" Type="float" Nullable="false" />
   </EntityType>
@@ -179,6 +188,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_MemberIncome_Income">
+    <End Role="Income" Type="Self.Income" Multiplicity="1" />
+    <End Role="MemberIncome" Type="Self.MemberIncome" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Income">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberIncome">
+        <PropertyRef Name="incomeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberIncome_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="MemberIncome" Type="Self.MemberIncome" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="MemberIncome">
+        <PropertyRef Name="memberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="budgetModelStoreContainer">
     <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Family" EntityType="Self.Family" Schema="dbo" store:Type="Tables" />
@@ -187,6 +220,7 @@
     <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberBudget" EntityType="Self.MemberBudget" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberExpense" EntityType="Self.MemberExpense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MemberIncome" EntityType="Self.MemberIncome" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SavingGoal" EntityType="Self.SavingGoal" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__Expense__memberI__5CD6CB2B" Association="Self.FK__Expense__memberI__5CD6CB2B">
       <End Role="Member" EntitySet="Member" />
@@ -219,6 +253,14 @@
     <AssociationSet Name="FK_MemberExpense_Member" Association="Self.FK_MemberExpense_Member">
       <End Role="Member" EntitySet="Member" />
       <End Role="MemberExpense" EntitySet="MemberExpense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberIncome_Income" Association="Self.FK_MemberIncome_Income">
+      <End Role="Income" EntitySet="Income" />
+      <End Role="MemberIncome" EntitySet="MemberIncome" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberIncome_Member" Association="Self.FK_MemberIncome_Member">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="MemberIncome" EntitySet="MemberIncome" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

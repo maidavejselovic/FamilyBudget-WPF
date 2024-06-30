@@ -1,4 +1,6 @@
 ﻿using FamilyBudgetApp.Windows;
+using LiveCharts.Wpf;
+using LiveCharts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,27 +31,17 @@ namespace FamilyBudgetApp.Pages
             InitializeComponent();
             _member = member;
             LoadNavbar();
-            LoadSavingGoals();
-            LoadTotalBudget();
+            //LoadTotalBudget();
             LoadTotalFamilyBudget();
+            LoadCategories();
+            LoadAllData(); // Učitaj sve transakcije na početku
+            LoadChartData();
         }
 
         private void LoadNavbar()
         {
-            Navbar navbar = new Navbar(_member);
+             Navbar navbar = new Navbar(_member);
             NavbarFrame.Content = navbar;
-        }
-        private void LoadSavingGoals()
-        {
-            List<SavingGoal> savingGoals = DatabaseManager.GetSavingGoals(_member.id);
-            GoalsItemsControl.ItemsSource = savingGoals;
-        }
-        private void LoadTotalBudget()
-        {
-            string errorMessage;
-            double budget = DatabaseManager.GetMemberBudget(_member.id, out errorMessage);
-
-            TotalBudgetTextBlock.Text = $"Moj budžet: \n {budget} RSD";
         }
         private void LoadTotalFamilyBudget()
         {
@@ -59,28 +51,126 @@ namespace FamilyBudgetApp.Pages
                 int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
                 double familyBudget = DatabaseManager.GetFamilyBudget(familyId, out errorMessage);
 
-                TotalFamilyBudgetTextBlock.Text = $"Porodični budžet: \n {familyBudget} RSD"; 
+                TotalFamilyBudgetTextBlock.Text = $"Porodični budžet: \n {familyBudget} RSD";
             }
         }
-
-        private void AddSavingGoalsButton_Click(object sender, RoutedEventArgs e)
+        private void LoadCategories()
         {
-            AddSavingGoal addSavingGoal = new AddSavingGoal(_member);
-            if (addSavingGoal.ShowDialog() == true)
-            {
-                string errorMessage;
+            var categories = DatabaseManager.GetCategoriesForMember(_member.id);
+            categoryComboBox.ItemsSource = categories;
+        }
 
-                if (DatabaseManager.AddSavingGoal(_member.id, addSavingGoal.GoalAmount, addSavingGoal.CurrentAmount, addSavingGoal.TargetDate, addSavingGoal.Description, out errorMessage))
-                {
-                    MessageBox.Show("Cilj štednje uspešno dodat!", "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LoadSavingGoals(); // Osvežavanje liste ciljeva štednje
-                }
-                else
-                {
-                    MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+        private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (categoryComboBox.SelectedItem is string selectedCategory)
+            {
+                LoadFilteredData(selectedCategory);
+            }
+            else
+            {
+                LoadAllData(); // Ako ništa nije izabrano, učitaj sve transakcije
             }
         }
+
+        private void LoadAllData()
+        {
+            List<Expense> expenses = DatabaseManager.GetExpensesForMember(_member.id);
+            List<Income> incomes = DatabaseManager.GetIncomesForMember(_member.id);
+
+            var combinedList = expenses.Select(expense => new
+            {
+                Date = expense.date,
+                Description = expense.description,
+                Amount = -expense.amount, // Dodavanje minusa ispred iznosa
+                Category = expense.category, // Dodajte kategoriju
+                Type = "Trošak"
+            })
+            .Concat(incomes.Select(income => new
+            {
+                Date = income.date,
+                Description = income.description,
+                Amount = income.amount,
+                Category = income.category, // Dodajte kategoriju
+                Type = "Prihod"
+            }))
+            .OrderBy(item => item.Date)
+            .ToList();
+
+            transactionsListView.ItemsSource = combinedList;
+        }
+
+
+        private void LoadFilteredData(string category)
+        {
+            List<Expense> expenses = DatabaseManager.GetExpensesByCategory(_member.id, category);
+            List<Income> incomes = DatabaseManager.GetIncomesByCategory(_member.id, category);
+
+            var combinedList = expenses.Select(expense => new
+            {
+                Date = expense.date,
+                Description = expense.description,
+                Amount = -expense.amount, // minus ispred iznosa
+                Category = category,
+                Type = "Trošak"
+            })
+            .Concat(incomes.Select(income => new
+            {
+                Date = income.date,
+                Description = income.description,
+                Amount = income.amount,
+                Category = category,
+                Type = "Prihod"
+            }))
+            .OrderByDescending(item => item.Date)
+            .ToList();
+
+            transactionsListView.ItemsSource = combinedList;
+        }
+        private void LoadChartData()
+        {
+            int memberId = _member.id; // Koristite _member.id umesto hardkodiranja 1
+
+            // Uzimanje svih kategorija za datog člana
+            List<string> categories = DatabaseManager.GetCategoriesForMember(memberId);
+
+            // Uzimanje ukupnih troškova po kategorijama
+            SeriesCollection expensesSeries = new SeriesCollection();
+            foreach (string category in categories)
+            {
+                List<Expense> expenses = DatabaseManager.GetExpensesByCategory(memberId, category);
+                double totalExpense = expenses.Sum(e => e.amount);
+                expensesSeries.Add(new PieSeries
+                {
+                    Title = category,
+                    Values = new ChartValues<double> { totalExpense },
+                    DataLabels = true,
+                    LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
+                });
+            }
+
+            // Uzimanje ukupnih prihoda po kategorijama
+            SeriesCollection incomesSeries = new SeriesCollection();
+            foreach (string category in categories)
+            {
+                List<Income> incomes = DatabaseManager.GetIncomesByCategory(memberId, category);
+                double totalIncome = incomes.Sum(i => i.amount);
+                incomesSeries.Add(new PieSeries
+                {
+                    Title = category,
+                    Values = new ChartValues<double> { totalIncome },
+                    DataLabels = true,
+                    LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
+                });
+            }
+
+            // Postavljanje serija za troškove grafikona
+            expensesPieChart.Series = expensesSeries;
+
+            // Postavljanje serija za prihode grafikona
+            incomesPieChart.Series = incomesSeries;
+        }
+
+
     }
 
 }

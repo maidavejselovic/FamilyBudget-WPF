@@ -23,6 +23,9 @@ namespace FamilyBudgetApp.Pages
     {
         private Member _member;
         private List<string> _categories;
+        private List<Member> FamilyMembers;
+        private List<MemberIncome> MemberIncomes;
+
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
 
@@ -34,11 +37,27 @@ namespace FamilyBudgetApp.Pages
             LoadNavbar();
             LoadIncomeData(); // Dodaj ovu liniju za učitavanje podataka
             LoadCategories();
+            LoadFamilyMembers();
 
             MaxDate = DateTime.Today;
             MinDate = DateTime.Today.AddDays(-30);
+
             // Postavite DataContext za ovu stranicu da omogućite Binding
             this.DataContext = this;
+
+            // Initialize MemberIncomes list
+            MemberIncomes = new List<MemberIncome>();
+            foreach (var familyMember in FamilyMembers)
+            {
+                MemberIncomes.Add(new MemberIncome
+                {
+                    memberId = familyMember.id,
+                    sharePercentage = 0,//Initial value; will be updated via binding
+                    Member = familyMember // Postavljanje Member objekta
+                });
+            }
+            // Set ItemsSource for membersSharesControl
+            membersSharesControl.ItemsSource = MemberIncomes;
         }
 
         private void LoadNavbar()
@@ -69,7 +88,23 @@ namespace FamilyBudgetApp.Pages
 
             category_comboBox.ItemsSource = _categories;
         }
+        private void LoadFamilyMembers()
+        {
+            string errorMessage;
+            if (_member.familyId != null)
+            {
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
+                FamilyMembers = DatabaseManager.GetFamilyMembers1(familyId, out errorMessage);
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    MessageBox.Show($"Error loading family members: {errorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    FamilyMembers = new List<Member>();
+                }
+            }
+        }
         private void amount_MouseDown(object sender, MouseButtonEventArgs e)
         {
             amount_box.Focus();
@@ -154,21 +189,51 @@ namespace FamilyBudgetApp.Pages
 
             if (!DateTime.TryParse(date_picker.Text, out DateTime date))
             {
-                MessageBox.Show("Neispravan datum.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nevažeći datum.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!ValidateSharePercentages())
+            {
+                MessageBox.Show("Ukupni udeo mora biti 100%.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             int memberId = _member.id;
 
-            if (DatabaseManager.AddIncome(memberId, amount, category_comboBox.Text, date, description_box.Text, out errorMessage))
+            List<MemberIncome> memberIncomes = new List<MemberIncome>();
+
+            foreach (MemberIncome memberIncome in MemberIncomes)
             {
-                MessageBox.Show("Vaš prihod je uspešno dodat.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
+                double sharePercentage = memberIncome.sharePercentage;
+                double memberAmount = amount * (sharePercentage / 100.0);
+
+                memberIncomes.Add(new MemberIncome
+                {
+                    memberId = memberIncome.memberId,
+                    sharePercentage = sharePercentage,
+                    memberAmount = memberAmount
+                });
+            }
+
+            if (DatabaseManager.AddIncomeAndMemberIncomes(memberId, amount, category_comboBox.Text, date, description_box.Text, memberIncomes, out errorMessage))
+            {
+                MessageBox.Show("Vaš prihod je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadIncomeData();
             }
             else
             {
-                MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errorMessage ?? "Greška pri čuvanju prihoda i udeljenih prihoda.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private bool ValidateSharePercentages()
+        {
+            double totalPercentage = 0;
+            foreach (var memberIncome in MemberIncomes)
+            {
+                totalPercentage += memberIncome.sharePercentage;
+            }
+            return totalPercentage == 100;
         }
     }
 }

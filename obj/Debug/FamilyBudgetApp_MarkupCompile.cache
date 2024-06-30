@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\PC\Desktop\OOP2\FamilyBudgetApp\App.xaml
-11-1237447835
+12-1388805083
 22035508349
-28-1467835481
+291982709545
 261070656540
-MainWindow.xaml;Pages\AddExpense.xaml;Pages\AddIncome.xaml;Pages\FamilyMembers.xaml;Pages\FilteredDataPage.xaml;Pages\Home.xaml;Pages\Login.xaml;Pages\Navbar.xaml;Pages\Register.xaml;Windows\AddFamily.xaml;Windows\AddSavingGoal.xaml;
+MainWindow.xaml;Pages\AddExpense.xaml;Pages\AddIncome.xaml;Pages\FamilyMembers.xaml;Pages\Home.xaml;Pages\Login.xaml;Pages\MyBudget.xaml;Pages\Navbar.xaml;Pages\Register.xaml;Pages\SavingsGoals.xaml;Windows\AddFamily.xaml;Windows\AddSavingGoal.xaml;
 
 False
 

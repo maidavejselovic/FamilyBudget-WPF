@@ -52,7 +52,6 @@
           <ScalarProperty Name="lastName" ColumnName="lastName" />
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="password" ColumnName="password" />
-          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
           <ScalarProperty Name="familyId" ColumnName="familyId" />
           <ScalarProperty Name="status" ColumnName="status" />
         </MappingFragment>
@@ -75,6 +74,17 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="memberId" ColumnName="memberId" />
           <ScalarProperty Name="expenseId" ColumnName="expenseId" />
+          <ScalarProperty Name="sharePercentage" ColumnName="sharePercentage" />
+          <ScalarProperty Name="memberAmount" ColumnName="memberAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberIncomes">
+      <EntityTypeMapping TypeName="budgetModel.MemberIncome">
+        <MappingFragment StoreEntitySet="MemberIncome">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="memberId" ColumnName="memberId" />
+          <ScalarProperty Name="incomeId" ColumnName="incomeId" />
           <ScalarProperty Name="sharePercentage" ColumnName="sharePercentage" />
           <ScalarProperty Name="memberAmount" ColumnName="memberAmount" />
         </MappingFragment>

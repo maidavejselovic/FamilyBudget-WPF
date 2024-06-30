@@ -36,7 +36,6 @@ namespace FamilyBudgetApp.Pages
         }
         private void Hyperlink_Home_Click(object sender, RoutedEventArgs e)
         {
-            //this.NavigationService.Navigate(new AddExpense(_member));
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.Navigate(new Home(_member));
 
@@ -49,21 +48,23 @@ namespace FamilyBudgetApp.Pages
         }
         private void Hyperlink_Income_Click(object sender, RoutedEventArgs e)
         {
-            //this.NavigationService.Navigate(new AddIncome(_member));
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.Navigate(new AddIncome(_member));
         }
         private void Hyperlink_Family_Click(object sender, RoutedEventArgs e)
         {
-            //this.NavigationService.Navigate(new AddIncome(_member));
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.Navigate(new FamilyMembers(_member));
         }
-        private void Hyperlink_Filter_Click(object sender, RoutedEventArgs e)
+        private void Hyperlink_MyBudget_Click(object sender, RoutedEventArgs e)
         {
-            //this.NavigationService.Navigate(new AddIncome(_member));
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-            mainWindow.Navigate(new FilteredDataPage(_member));
+            mainWindow.Navigate(new MyBudget(_member));
+        }
+        private void Hyperlink_SavingsGoals_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+            mainWindow.Navigate(new SavingsGoals(_member));
         }
         private void Hyperlink_Logout_Click(object sender, RoutedEventArgs e)
         {

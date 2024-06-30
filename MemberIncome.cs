@@ -12,15 +12,15 @@ namespace FamilyBudgetApp
     using System;
     using System.Collections.Generic;
     
-    public partial class MemberExpense
+    public partial class MemberIncome
     {
         public int id { get; set; }
         public int memberId { get; set; }
-        public int expenseId { get; set; }
+        public int incomeId { get; set; }
         public double sharePercentage { get; set; }
         public double memberAmount { get; set; }
     
-        public virtual Expense Expense { get; set; }
+        public virtual Income Income { get; set; }
         public virtual Member Member { get; set; }
     }
 }

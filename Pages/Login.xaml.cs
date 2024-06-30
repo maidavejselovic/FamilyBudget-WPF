@@ -84,7 +84,7 @@ namespace FamilyBudgetApp.Pages
                 // Navigacija nakon uspešnog logovanja
                 //this.NavigationService.Navigate(new AddIncome(member));
                 MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.Navigate(new FamilyMembers(member));
+                mainWindow.Navigate(new Home(member));
             }
             else
             {

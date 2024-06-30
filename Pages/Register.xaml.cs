@@ -80,13 +80,13 @@ namespace FamilyBudgetApp.Pages
                 return;
             }
 
-            string status = "odobren"; // Početni status je odobren
+            string status = "Odobren"; // Početni status je odobren
             string errorMessage;
             // Provera da li postoji već neki član u odabranoj porodici
             List<Member> familyMembers = DatabaseManager.GetFamilyMembers(familyId, out errorMessage);
             if (familyMembers.Any())
             {
-                status = "na čekanju"; // Ako postoje drugi članovi u porodici, status je na čekanju
+                status = "Na čekanju"; // Ako postoje drugi članovi u porodici, status je na čekanju
             }
 
             // Registracija novog člana

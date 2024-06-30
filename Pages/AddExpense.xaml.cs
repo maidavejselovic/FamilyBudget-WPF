@@ -13,9 +13,11 @@ namespace FamilyBudgetApp.Pages
     {
         private Member _member;
         private List<string> _categories;
-        private List<Member> Members;
+        private List<Member> FamilyMembers;
         private List<MemberExpense> MemberExpenses;
 
+        public DateTime MinDate { get; set; }
+        public DateTime MaxDate { get; set; }
 
         public AddExpense(Member member)
         {
@@ -26,12 +28,14 @@ namespace FamilyBudgetApp.Pages
             LoadFamilyMembers();
             LoadCategories();
 
+            MaxDate = DateTime.Today;
+            MinDate = DateTime.Today.AddDays(-30);
             // Set DataContext for this page to enable Binding
             this.DataContext = this;
 
             // Initialize MemberExpenses list
             MemberExpenses = new List<MemberExpense>();
-            foreach (var familyMember in Members)
+            foreach (var familyMember in FamilyMembers)
             {
                 MemberExpenses.Add(new MemberExpense
                 {
@@ -42,24 +46,6 @@ namespace FamilyBudgetApp.Pages
             }
             // Set ItemsSource for membersSharesControl
             membersSharesControl.ItemsSource = MemberExpenses;
-        }
-
-        private void LoadFamilyMembers()
-        {
-            string errorMessage;
-            if (_member.familyId != null)
-            {
-                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
-
-                Members = DatabaseManager.GetFamilyMembers(familyId, out errorMessage);
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    MessageBox.Show($"Error loading family members: {errorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    Members = new List<Member>();
-                }
-            }
         }
         private void LoadNavbar()
         {
@@ -89,7 +75,23 @@ namespace FamilyBudgetApp.Pages
 
             category_comboBox.ItemsSource = _categories;
         }
+        private void LoadFamilyMembers()
+        {
+            string errorMessage;
+            if (_member.familyId != null)
+            {
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
+                FamilyMembers = DatabaseManager.GetFamilyMembers1(familyId, out errorMessage);
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    MessageBox.Show($"Error loading family members: {errorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    FamilyMembers = new List<Member>();
+                }
+            }
+        }
         private void amount_MouseDown(object sender, MouseButtonEventArgs e)
         {
             amount_box.Focus();

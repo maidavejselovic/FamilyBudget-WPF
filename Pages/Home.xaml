@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       xmlns:local="clr-namespace:FamilyBudgetApp.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -16,60 +17,67 @@
 
         <Frame Grid.Column="0" x:Name="NavbarFrame"/>
 
-        <StackPanel Background="#dfeeed" Grid.Column="1">
-            <TextBlock Text="Ciljevi štednje" FontSize="20" FontWeight="Bold" Foreground="Black" Margin="10"/>
-            <Border HorizontalAlignment="Left" Height="50" Width="200" CornerRadius="10">
-                <Button Content="Dodajte cilj štednje" Style="{StaticResource buttonView2}" Click="AddSavingGoalsButton_Click"></Button>
-            </Border>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
-                        <TextBlock x:Name="TotalBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Border>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
-                        <TextBlock x:Name="TotalFamilyBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Border>
+        <ScrollViewer Grid.Column="1" Background="#dfeeed" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
 
-                </StackPanel>
-            </Grid>
-           
-            <ItemsControl x:Name="GoalsItemsControl" Margin="10">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="#5eac9c" CornerRadius="10" Padding="10" Margin="5">
-                            <StackPanel>
-                                <TextBlock Foreground="White" FontSize="17" Margin="8 2">
-                                    <Run Text="Ciljni iznos: " />
-                                    <Run Text="{Binding goalAmount}" FontWeight="Bold" />
-                                </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Trenutni iznos: " />
-                                    <Run Text="{Binding currentAmount}" FontWeight="Bold"/>
-                                </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Opis: " />
-                                    <Run Text="{Binding description}" FontWeight="Bold"/>
-                                </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Datum: "/>
-                                    <Run Text="{Binding targetDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
-                                </TextBlock>
-                            </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
+                            <TextBlock x:Name="TotalFamilyBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Troškovi -->
+                        <StackPanel  Grid.Column="0">
+                            <TextBlock Text="Troškovi" Margin="10" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="15" TextAlignment="Center"/>
+                            <wpf:PieChart x:Name="expensesPieChart" Width="210" Height="210" DataTooltip="{x:Null}"  />
+                        </StackPanel>
+
+                        <!-- Prihodi -->
+                        <StackPanel  Grid.Column="1">
+                            <TextBlock Text="Prihodi" Margin="10" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="15" TextAlignment="Center"/>
+                            <wpf:PieChart x:Name="incomesPieChart" Width="250" Height="250"  DataTooltip="{x:Null}" LegendLocation="Bottom"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0 30 0 0">
+                        <TextBlock Text="Odaberite kategoriju" Margin="15 0 0 0" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="13" TextAlignment="Left"/>
+                        <ComboBox x:Name="categoryComboBox" SelectionChanged="CategoryComboBox_SelectionChanged" Width="200" Margin="15 25 10 15" HorizontalAlignment="Left"/>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <ListView x:Name="transactionsListView" Margin="10" Background="#dfeeed" BorderThickness="0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="1" BorderBrush="#5eac9c" Width="620" CornerRadius="5" Margin="0 5 0 5">
+                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                            <StackPanel Width="535">
+                                                <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Category}" FontWeight="Bold" FontStyle="Italic" FontSize="15" Margin="0,5,0,0"/>
+                                                <TextBlock Text="{Binding Description}" Margin="0,5,0,0" FontSize="10"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Amount, StringFormat=F2}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold" FontSize="13"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Row="4" Margin="20">
+                        <wpf:DefaultLegend x:Name="combinedLegend" />
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

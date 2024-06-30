@@ -19,16 +19,18 @@
 
         <!-- Panel sa podacima o članovima porodice -->
         <StackPanel Grid.Column="1" Background="#dfeeed">
+            <TextBlock Text="Članovi vaše porodice" Margin="10" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="20" TextAlignment="Center" />
+
             <!-- TextBlock za prikaz poruke o čekanju -->
             <TextBlock x:Name="pendingMessageTextBlock" Text="Čekate prihvatanje u porodicu." 
                        FontSize="16" FontWeight="Bold" Foreground="Red"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Visibility="Collapsed" Margin="15 50 15 0"/>
+                       Visibility="Collapsed" Margin="10 50 15 0"/>
 
             <!-- DataGrid za prikaz članova porodice -->
             <DataGrid x:Name="incomeDataGrid" AutoGenerateColumns="False"
                       IsReadOnly="True" HeadersVisibility="Column"
-                      Margin="15 50 15 0" RowHeight="35" Visibility="Visible">
+                      Margin="15 30 15 0" RowHeight="35" Visibility="Visible">
                 <DataGrid.Columns>
                     <!-- Kolona za ime -->
                     <DataGridTemplateColumn Header="Ime" Width="*">
@@ -48,19 +50,22 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Kolona za odobravanje/odbijanje člana porodice -->
-                    <DataGridTemplateColumn Header="Odobri/Odbij člana porodice" Width="*">
+                    <!-- Kolona za status člana porodice i odobravanje/odbijanje -->
+                    <DataGridTemplateColumn Header="Odobri/Odbij" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <!-- Tekst za status člana porodice -->
-                                    <TextBlock Text="{Binding status}">
+                                    <TextBlock>
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Setter Property="Text" Value="{Binding status}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding status}" Value="Odobren">
                                                         <Setter Property="Text" Value="Odobren"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding status}" Value="Na čekanju">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -68,7 +73,7 @@
                                     </TextBlock>
 
                                     <!-- Dugmad za odobravanje/odbijanje -->
-                                    <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,5,0,0">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
                                                 <Setter Property="Visibility" Value="Collapsed"/>

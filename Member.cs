@@ -22,6 +22,7 @@ namespace FamilyBudgetApp
             this.MemberBudgets = new HashSet<MemberBudget>();
             this.SavingGoals = new HashSet<SavingGoal>();
             this.MemberExpenses = new HashSet<MemberExpense>();
+            this.MemberIncomes = new HashSet<MemberIncome>();
         }
     
         public int id { get; set; }
@@ -29,7 +30,6 @@ namespace FamilyBudgetApp
         public string lastName { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public System.DateTime dateOfBirth { get; set; }
         public Nullable<int> familyId { get; set; }
         public string status { get; set; }
     
@@ -44,5 +44,7 @@ namespace FamilyBudgetApp
         public virtual ICollection<SavingGoal> SavingGoals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberExpense> MemberExpenses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MemberIncome> MemberIncomes { get; set; }
     }
 }

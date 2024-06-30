@@ -99,7 +99,6 @@
     <Compile Include="Income.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="MainViewModel.cs" />
     <Compile Include="Member.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -107,6 +106,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="MemberExpense.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MemberIncome.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Model.Context.cs">
@@ -133,20 +135,23 @@
     <Compile Include="Pages\FamilyMembers.xaml.cs">
       <DependentUpon>FamilyMembers.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FilteredDataPage.xaml.cs">
-      <DependentUpon>FilteredDataPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MyBudget.xaml.cs">
+      <DependentUpon>MyBudget.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Navbar.xaml.cs">
       <DependentUpon>Navbar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SavingsGoals.xaml.cs">
+      <DependentUpon>SavingsGoals.xaml</DependentUpon>
     </Compile>
     <Compile Include="SavingGoal.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -181,10 +186,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\FilteredDataPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,11 +194,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\MyBudget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Navbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Register.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SavingsGoals.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

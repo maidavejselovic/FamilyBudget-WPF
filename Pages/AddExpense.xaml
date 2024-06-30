@@ -40,7 +40,16 @@
                         <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
                             <Grid>
                                 <TextBlock x:Name="date_block" Text="Izaberite datum" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" Width="300" MouseDown="date_MouseDown" Visibility="Visible"/>
-                                <DatePicker x:Name="date_picker" FontSize="12" Background="Transparent" BorderThickness="0" Width="300" VerticalAlignment="Center" SelectedDateChanged="date_SelectedDateChanged" Visibility="Collapsed" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}"/>
+                                <DatePicker x:Name="date_picker" 
+                                        FontSize="12" 
+                                        Background="Transparent" 
+                                        BorderThickness="0" Width="300"
+                                        VerticalAlignment="Center"
+                                        SelectedDate="{Binding Date}"
+                                        DisplayDateStart="{Binding MinDate}" 
+                                        DisplayDateEnd="{Binding MaxDate}"
+                                        SelectedDateChanged="date_SelectedDateChanged" 
+                                        Visibility="Collapsed"/>
                             </Grid>
                         </Border>
                         <Border Width="320" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="3" Opacity="0.7">
@@ -79,8 +88,20 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Kategorija" Binding="{Binding category}" Width="*"/>
                                 <DataGridTextColumn Header="Opis" Binding="{Binding description}" Width="*"/>
-                                <DataGridTextColumn Header="Datum" Binding="{Binding date, StringFormat=dd.MM.yyyy}" Width="*"/>
-                                <DataGridTextColumn Header="Iznos" Binding="{Binding amount}" Width="*"/>
+                                <DataGridTextColumn Header="Datum" Binding="{Binding date, StringFormat=dd.MM.yyyy}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Iznos" Binding="{Binding amount}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>    
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

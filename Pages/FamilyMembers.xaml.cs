@@ -34,6 +34,23 @@ namespace FamilyBudgetApp.Pages
             Navbar navbar = new Navbar(_member);
             NavbarFrame.Content = navbar;
         }
+        private void LoadFamilyMembers()
+        {
+            if (_member.familyId != null)
+            {
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
+                List<Member> familyMembers = DatabaseManager.GetFamilyMembers(familyId, out string errorMessage);
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+
+                }
+                else
+                {
+                    // Ako nema greške, postavi članove porodice u izvor podataka za DataGrid
+                    incomeDataGrid.ItemsSource = familyMembers;
+                }
+            }
+        }
         private void CheckMemberStatusAndLoadContent()
         {
             if (_member.status == "na čekanju")
@@ -51,23 +68,8 @@ namespace FamilyBudgetApp.Pages
                 LoadFamilyMembers();
             }
         }
-        private void LoadFamilyMembers()
-        {
-            if (_member.familyId != null)
-            {
-                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
-                List<Member> familyMembers = DatabaseManager.GetFamilyMembers(familyId, out string errorMessage);
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    // Obradi grešku ako je potrebno
-                }
-                else
-                {
-                    // Ako nema greške, postavi članove porodice u izvor podataka za DataGrid
-                    incomeDataGrid.ItemsSource = familyMembers;
-                }
-            }
-        }
+
+       
         private void ApproveButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -85,6 +87,7 @@ namespace FamilyBudgetApp.Pages
                 }
             }
         }
+
         private void RejectButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;

@@ -28,18 +28,19 @@
             <TextBlock FontSize="15" Width="300">
                 <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Home_Click">Početna</Hyperlink>
                 <LineBreak/>
-                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Family_Click">Pogledaj članove</Hyperlink>
+                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Family_Click">Članovi porodice</Hyperlink>
                  <LineBreak/>
                 <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Expense_Click">Troškovi</Hyperlink>
                 <LineBreak/>
                 <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Income_Click">Prihodi</Hyperlink>
                 <LineBreak/>
-                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Filter_Click">Prihodi i troskovi</Hyperlink>
-
+                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_MyBudget_Click">Moj budžet</Hyperlink>
+                <LineBreak/>
+                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_SavingsGoals_Click">Ciljevi stednje</Hyperlink>
             </TextBlock>
         </StackPanel>
 
-        <!-- Logout hyperlink na dnu -->
+        <!-- Logout -->
         <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0 0 0 15">
             <TextBlock HorizontalAlignment="Center">
                 <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Logout_Click">Logout</Hyperlink>

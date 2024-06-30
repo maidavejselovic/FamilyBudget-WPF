@@ -20,6 +20,9 @@ namespace FamilyBudgetApp.Windows
     public partial class AddSavingGoal : Window
     {
         private Member _member;
+        public DateTime MinDate { get; set; }
+        public DateTime MaxDate { get; set; }
+
 
         public double GoalAmount { get; private set; }
         public double CurrentAmount { get; private set; }
@@ -30,6 +33,11 @@ namespace FamilyBudgetApp.Windows
         {
             InitializeComponent();
             _member = member;
+
+            MinDate = DateTime.Today;
+           // MaxDate = DateTime.Today.AddDays(30);
+            MaxDate = DateTime.Today.AddMonths(1); 
+          
         }
         private void goalAmount_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -123,7 +131,7 @@ namespace FamilyBudgetApp.Windows
             GoalAmount = goalAmount;
             CurrentAmount = currentAmount;
             TargetDate = date_picker.SelectedDate.Value;
-            Description = description_box.Text;
+            Description = description_box.Text;  
 
             DialogResult = true;
             Close();
