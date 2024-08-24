@@ -34,11 +34,122 @@ namespace FamilyBudgetApp.Pages
             Navbar navbar = new Navbar(_member);
             NavbarFrame.Content = navbar;
         }
+        //private void LoadSavingsGoals()
+        //{
+        //    List<SavingGoal> savingGoals = DatabaseManager.GetSavingGoals(_member.id);
+        //    GoalsItemsControl.ItemsSource = savingGoals;
+        //}
+
+
+        /* private void LoadSavingsGoals()
+         {
+             string errorMessage;
+
+             // Dohvati trenutni budžet porodice pomoću funkcije GetFamilyBudget
+             double currentBudget = DatabaseManager.GetFamilyBudget(_member.id, out errorMessage);
+
+             if (!string.IsNullOrEmpty(errorMessage))
+             {
+                 MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                 return;
+             }
+
+             // Dohvati ciljeve štednje člana porodice pomoću funkcije GetSavingGoals
+             List<SavingGoal> savingGoals = DatabaseManager.GetSavingGoals(_member.id, out errorMessage);
+
+             if (!string.IsNullOrEmpty(errorMessage))
+             {
+                 MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                 return;
+             }
+
+             foreach (var goal in savingGoals)
+             {
+                 string newStatus;
+                 string statusMessage = DatabaseManager.CheckSavingsGoalStatus(goal, currentBudget, out newStatus);
+
+                 if (newStatus != goal.status)
+                 {
+                     // Ažuriraj status u bazi podataka
+                     DatabaseManager.UpdateSavingGoalStatus(goal.id, newStatus);
+                 }
+
+                 if (!string.IsNullOrEmpty(statusMessage))
+                 {
+                     MessageBox.Show(statusMessage, "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
+                 }
+             }
+
+             // Prikazivanje ciljeva štednje sa budžetom
+             GoalsItemsControl.ItemsSource = savingGoals.Select(goal => new
+             {
+                 goal.goalAmount,
+                 goal.description,
+                 goal.targetDate,
+                 budgetAmount = currentBudget, // Prikazuje budžet kao "budgetAmount"
+                 goal.status 
+             }).ToList();
+         }*/
         private void LoadSavingsGoals()
         {
-            List<SavingGoal> savingGoals = DatabaseManager.GetSavingGoals(_member.id);
-            GoalsItemsControl.ItemsSource = savingGoals;
+            string errorMessage;
+
+            if (!_member.familyId.HasValue)
+            {
+                MessageBox.Show("Family ID nije dostupan.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            int familyId = _member.familyId.Value;
+
+            // Dohvati ciljeve štednje za sve članove porodice pomoću funkcije GetFamilySavingGoals
+            List<SavingGoal> familySavingGoals = DatabaseManager.GetFamilySavingGoals(familyId, out errorMessage);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Dohvati trenutni budžet porodice
+            double currentBudget = DatabaseManager.GetFamilyBudget(familyId, out errorMessage);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            foreach (var goal in familySavingGoals)
+            {
+                string newStatus;
+                string statusMessage = DatabaseManager.CheckSavingsGoalStatus(goal, currentBudget, out newStatus);
+
+                if (newStatus != goal.status)
+                {
+                    // Ažuriraj status u bazi podataka
+                    DatabaseManager.UpdateSavingGoalStatus(goal.id, newStatus);
+                }
+
+                if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    MessageBox.Show(statusMessage, "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+
+            // Prikazivanje ciljeva štednje sa budžetom
+            GoalsItemsControl.ItemsSource = familySavingGoals.Select(goal => new
+            {
+                goal.goalAmount,
+                goal.description,
+                goal.targetDate,
+                budgetAmount = currentBudget, // Prikazuje budžet kao "budgetAmount"
+                goal.status
+            }).ToList();
         }
+
+
+
         private void AddSavingGoalsButton_Click(object sender, RoutedEventArgs e)
         {
             AddSavingGoal addSavingGoal = new AddSavingGoal(_member);
@@ -46,7 +157,7 @@ namespace FamilyBudgetApp.Pages
             {
                 string errorMessage;
 
-                if (DatabaseManager.AddSavingGoal(_member.id, addSavingGoal.GoalAmount, addSavingGoal.CurrentAmount, addSavingGoal.TargetDate, addSavingGoal.Description, out errorMessage))
+                if (DatabaseManager.AddSavingGoal(_member.id, addSavingGoal.GoalAmount, addSavingGoal.TargetDate, addSavingGoal.Description, out errorMessage))
                 {
                     MessageBox.Show("Cilj štednje uspešno dodat!", "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
                     LoadSavingsGoals(); // Osvežavanje liste ciljeva štednje

@@ -81,10 +81,10 @@
 
                     <StackPanel Grid.Row="1" Margin="10 50 10 0">
                         <DataGrid x:Name="incomeDataGrid" AutoGenerateColumns="False"
-              IsReadOnly="True" 
-              HeadersVisibility="Column"
-              Margin="10"
-              RowHeight="25" >
+                          IsReadOnly="True" 
+                          HeadersVisibility="Column"
+                          Margin="10"
+                          RowHeight="25" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Kategorija" Binding="{Binding category}" Width="*"/>
                                 <DataGridTextColumn Header="Opis" Binding="{Binding description}" Width="*"/>
@@ -101,8 +101,11 @@
                                             <Setter Property="HorizontalAlignment" Value="Right" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>    
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Udeo po clanovima" Binding="{Binding description}" Width="*"/>
+
                             </DataGrid.Columns>
+                            
                         </DataGrid>
                     </StackPanel>
 

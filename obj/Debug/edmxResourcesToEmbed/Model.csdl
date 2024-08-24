@@ -61,7 +61,7 @@
     <NavigationProperty Name="Family" Relationship="Self.FK__Member__familyId__398D8EEE" FromRole="Member" ToRole="Family" />
     <NavigationProperty Name="Incomes" Relationship="Self.FK__Income__memberId__3F466844" FromRole="Member" ToRole="Income" />
     <NavigationProperty Name="MemberBudgets" Relationship="Self.FK__MemberBud__membe__4E88ABD4" FromRole="Member" ToRole="MemberBudget" />
-    <NavigationProperty Name="SavingGoals" Relationship="Self.FK__SavingGoa__membe__4316F928" FromRole="Member" ToRole="SavingGoal" />
+    <NavigationProperty Name="SavingGoals" Relationship="Self.FK__SavingGoa__membe__6FE99F9F" FromRole="Member" ToRole="SavingGoal" />
     <NavigationProperty Name="MemberExpenses" Relationship="Self.FK_MemberExpense_Member" FromRole="Member" ToRole="MemberExpense" />
     <NavigationProperty Name="MemberIncomes" Relationship="Self.FK_MemberIncome_Member" FromRole="Member" ToRole="MemberIncome" />
   </EntityType>
@@ -106,11 +106,11 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="goalAmount" Type="Double" Nullable="false" />
-    <Property Name="currentAmount" Type="Double" />
     <Property Name="targetDate" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="memberId" Type="Int32" />
-    <NavigationProperty Name="Member" Relationship="Self.FK__SavingGoa__membe__4316F928" FromRole="SavingGoal" ToRole="Member" />
+    <NavigationProperty Name="Member" Relationship="Self.FK__SavingGoa__membe__6FE99F9F" FromRole="SavingGoal" ToRole="Member" />
   </EntityType>
   <Association Name="FK__Expense__memberI__5CD6CB2B">
     <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
@@ -196,7 +196,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__SavingGoa__membe__4316F928">
+  <Association Name="FK__SavingGoa__membe__6FE99F9F">
     <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
     <End Role="SavingGoal" Type="Self.SavingGoal" Multiplicity="*" />
     <ReferentialConstraint>
@@ -270,7 +270,7 @@
       <End Role="Member" EntitySet="Members" />
       <End Role="MemberBudget" EntitySet="MemberBudgets" />
     </AssociationSet>
-    <AssociationSet Name="FK__SavingGoa__membe__4316F928" Association="Self.FK__SavingGoa__membe__4316F928">
+    <AssociationSet Name="FK__SavingGoa__membe__6FE99F9F" Association="Self.FK__SavingGoa__membe__6FE99F9F">
       <End Role="Member" EntitySet="Members" />
       <End Role="SavingGoal" EntitySet="SavingGoals" />
     </AssociationSet>

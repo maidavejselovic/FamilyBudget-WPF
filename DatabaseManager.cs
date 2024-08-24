@@ -22,7 +22,7 @@ namespace FamilyBudgetApp
                     // Provera da li porodica već postoji
                     if (context.Families.Any(f => f.familyName == familyName))
                     {
-                        errorMessage = "Porodica već postoji.";
+                        errorMessage = "Naziv porodice već postoji.";
                         return false;
                     }
 
@@ -293,6 +293,28 @@ namespace FamilyBudgetApp
                 return new List<SavingGoal>();
             }
         }
+        public static List<SavingGoal> GetFamilySavingGoals(int familyId, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            List<SavingGoal> familySavingGoals = new List<SavingGoal>();
+
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    familySavingGoals = context.SavingGoals
+                        .Where(sg => sg.Member.familyId == familyId)
+                        .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "An error occurred: " + ex.Message;
+            }
+
+            return familySavingGoals;
+        }
+
         public static double GetMemberBudget(int memberId, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -318,6 +340,7 @@ namespace FamilyBudgetApp
                 return 0;
             }
         }
+        //funkcija za dohvatanje budzeta porodice
         public static double GetFamilyBudget(int familyId, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -343,8 +366,70 @@ namespace FamilyBudgetApp
                 return 0;
             }
         }
+        //funkcija za dohvatanje ciljeva stednje 
+        public static List<SavingGoal> GetSavingGoals(int memberId, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.SavingGoals.Where(sg => sg.memberId == memberId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Greška prilikom dohvatanja ciljeva štednje: {ex.Message}";
+                return new List<SavingGoal>();
+            }
+        }
+        public static string CheckSavingsGoalStatus(SavingGoal goal, double currentBudget, out string newStatus)
+        {
+            newStatus = goal.status;
+            double remainingAmount = currentBudget - goal.goalAmount;
 
-        public static bool AddSavingGoal(int memberId, double goalAmount, double currentAmount, DateTime targetDate, string description, out string errorMessage)
+            if (goal.targetDate < DateTime.Today)  //ako je prosao datum
+            {
+                if (remainingAmount >= 0 && goal.status == "u toku...")
+                {
+                    newStatus = "uspesno";
+                    
+                }
+                else if (remainingAmount < 0 && goal.status != "neuspesno")
+                {
+                    newStatus = "neuspesno";
+                }
+            }
+            //ako nije prosao datum, ali sam vec dostigla ciljni iznos
+            else if (remainingAmount >= 0 && goal.status == "u toku...")
+            {
+                newStatus = "uspesno";
+            }
+
+            return null; // Nema poruke ako datum nije prošao i cilj nije postignut
+        }
+
+        public static void UpdateSavingGoalStatus(int goalId, string newStatus)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    var goal = context.SavingGoals.FirstOrDefault(sg => sg.id == goalId);
+                    if (goal != null)
+                    {
+                        goal.status = newStatus;
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška prilikom ažuriranja statusa cilja štednje: " + ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public static bool AddSavingGoal(int memberId, double goalAmount, DateTime targetDate, string description, out string errorMessage)
         {
             errorMessage = string.Empty;
             try
@@ -355,9 +440,10 @@ namespace FamilyBudgetApp
                     {
                         memberId = memberId,
                         goalAmount = goalAmount,
-                        currentAmount = currentAmount,
+                       // currentAmount = currentAmount,
                         targetDate = targetDate,
-                        description = description
+                        description = description,
+                        status = "u toku..."
                     };
                     context.SavingGoals.Add(newSavingGoal);
                     context.SaveChanges();

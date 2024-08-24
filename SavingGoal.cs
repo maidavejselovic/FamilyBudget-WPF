@@ -16,9 +16,9 @@ namespace FamilyBudgetApp
     {
         public int id { get; set; }
         public double goalAmount { get; set; }
-        public Nullable<double> currentAmount { get; set; }
         public System.DateTime targetDate { get; set; }
         public string description { get; set; }
+        public string status { get; set; }
         public Nullable<int> memberId { get; set; }
     
         public virtual Member Member { get; set; }

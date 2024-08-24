@@ -87,9 +87,9 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="goalAmount" Type="float" Nullable="false" />
-    <Property Name="currentAmount" Type="float" />
     <Property Name="targetDate" Type="date" Nullable="false" />
     <Property Name="description" Type="text" />
+    <Property Name="status" Type="text" />
     <Property Name="memberId" Type="int" />
   </EntityType>
   <Association Name="FK__Expense__memberI__5CD6CB2B">
@@ -152,7 +152,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__SavingGoa__membe__4316F928">
+  <Association Name="FK__SavingGoa__membe__6FE99F9F">
     <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
     <End Role="SavingGoal" Type="Self.SavingGoal" Multiplicity="*" />
     <ReferentialConstraint>
@@ -242,7 +242,7 @@
       <End Role="Member" EntitySet="Member" />
       <End Role="MemberBudget" EntitySet="MemberBudget" />
     </AssociationSet>
-    <AssociationSet Name="FK__SavingGoa__membe__4316F928" Association="Self.FK__SavingGoa__membe__4316F928">
+    <AssociationSet Name="FK__SavingGoa__membe__6FE99F9F" Association="Self.FK__SavingGoa__membe__6FE99F9F">
       <End Role="Member" EntitySet="Member" />
       <End Role="SavingGoal" EntitySet="SavingGoal" />
     </AssociationSet>

@@ -30,24 +30,59 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="#5eac9c" CornerRadius="10" Padding="10" Margin="5">
+                        <!--<Border Background="#fcbecd" CornerRadius="10" Padding="10" Margin="15">-->
+                        <Border Background="White" CornerRadius="10" Padding="10" Margin="15">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding status}" Value="uspesno">
+                                            <Setter Property="Background" Value="Green" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding status}" Value="neuspesno">
+                                            <Setter Property="Background" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding status}" Value="u toku...">
+                                            <Setter Property="Background" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                             <StackPanel>
-                                <TextBlock Foreground="White" FontSize="17" Margin="8 2">
-                                    <Run Text="Ciljni iznos: " />
-                                    <Run Text="{Binding goalAmount}" FontWeight="Bold" />
+                                <TextBlock Foreground="#565f66" FontSize="15" Margin="8 2">
+                                    Ciljni iznos: <TextBlock FontWeight="Bold" Text="{Binding goalAmount}" />
                                 </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Trenutni iznos: " />
-                                    <Run Text="{Binding currentAmount}" FontWeight="Bold"/>
+                                <TextBlock Foreground="#565f66" FontSize="15" Margin="8 2">
+                                    Trenutni iznos: <TextBlock FontWeight="Bold" Text="{Binding budgetAmount}" />
                                 </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Opis: " />
-                                    <Run Text="{Binding description}" FontWeight="Bold"/>
+                                <TextBlock Foreground="#565f66" FontSize="15" Margin="8 2">
+                                    Opis: <TextBlock FontWeight="Bold" Text="{Binding description}" />
                                 </TextBlock>
-                                <TextBlock Foreground="White" FontSize="15" Margin="8 2">
-                                    <Run Text="Datum: "/>
-                                    <Run Text="{Binding targetDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
+                                <TextBlock Foreground="#565f66" FontSize="15" Margin="8 2">
+                                    Datum: <TextBlock FontWeight="Bold" Text="{Binding targetDate, StringFormat=dd.MM.yyyy}" />
                                 </TextBlock>
+                              
+                                <TextBlock Foreground="#565f66" FontSize="15" Margin="8 2">
+                                    Status: 
+                                    <TextBlock FontWeight="Bold" Text="{Binding status}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding status}" Value="neuspesno">
+                                                        <Setter Property="Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding status}" Value="uspesno">
+                                                        <Setter Property="Foreground" Value="Green" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding status}" Value="u toku...">
+                                                        <Setter Property="Foreground" Value="#fbc558" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </TextBlock>
+
+
                             </StackPanel>
                         </Border>
                     </DataTemplate>

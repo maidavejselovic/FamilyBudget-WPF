@@ -27,8 +27,17 @@ namespace FamilyBudgetApp.Windows
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            // Provera da li su svi podaci uneseni
+            if (string.IsNullOrEmpty(familyNameTextBox.Text))
+            {
+                MessageBox.Show("Naziv porodice ne može biti prazan.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            if (DatabaseManager.AddFamily(familyNameTextBox.Text, out string errorMessage))
+            // Poziv metode za dodavanje porodice
+            bool isAdded = DatabaseManager.AddFamily(familyNameTextBox.Text, out string errorMessage);
+
+            if (isAdded)
             {
                 MessageBox.Show("Porodica uspešno dodata!", "Obaveštenje", MessageBoxButton.OK, MessageBoxImage.Information);
                 DialogResult = true;
@@ -36,8 +45,9 @@ namespace FamilyBudgetApp.Windows
             }
             else
             {
-                MessageBox.Show("Naziv porodice ne može biti prazan.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errorMessage, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }

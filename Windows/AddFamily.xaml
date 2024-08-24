@@ -10,7 +10,7 @@
         <StackPanel Margin="20">
             <TextBlock Text="Unesite naziv porodice:" Margin="20 20 20 5" FontSize="14"/>
             <TextBox x:Name="familyNameTextBox" Margin="15 0 15 15" Height="25" FontSize="13" />
-            <Button Content="Dodaj" Width="100" Height="25" Background="#5eac9c" Foreground="White" HorizontalAlignment="Center" Margin="20" Click="AddButton_Click"/>
+            <Button Content="Dodaj" Style="{StaticResource buttonView3}" Width="100" Background="#5eac9c" Foreground="White" HorizontalAlignment="Center" Margin="20" Click="AddButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

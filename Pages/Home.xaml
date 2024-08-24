@@ -26,7 +26,6 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Border HorizontalAlignment="Center" Height="110" Width="250" CornerRadius="10" Background="#5eac9c" Margin="20">
@@ -72,9 +71,6 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </Grid>
-                    <Grid Grid.Row="4" Margin="20">
-                        <wpf:DefaultLegend x:Name="combinedLegend" />
                     </Grid>
                 </Grid>
             </StackPanel>

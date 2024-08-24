@@ -95,9 +95,9 @@
         <MappingFragment StoreEntitySet="SavingGoal">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="goalAmount" ColumnName="goalAmount" />
-          <ScalarProperty Name="currentAmount" ColumnName="currentAmount" />
           <ScalarProperty Name="targetDate" ColumnName="targetDate" />
           <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="memberId" ColumnName="memberId" />
         </MappingFragment>
       </EntityTypeMapping>

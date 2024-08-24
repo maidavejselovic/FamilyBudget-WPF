@@ -25,7 +25,7 @@ namespace FamilyBudgetApp.Windows
 
 
         public double GoalAmount { get; private set; }
-        public double CurrentAmount { get; private set; }
+        //public double CurrentAmount { get; private set; }
         public DateTime TargetDate { get; private set; }
         public string Description { get; private set; }
 
@@ -35,9 +35,8 @@ namespace FamilyBudgetApp.Windows
             _member = member;
 
             MinDate = DateTime.Today;
-           // MaxDate = DateTime.Today.AddDays(30);
-            MaxDate = DateTime.Today.AddMonths(1); 
-          
+            MaxDate = DateTime.Today.AddDays(30);
+            //MaxDate = DateTime.Today.AddMonths(1); 
         }
         private void goalAmount_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -55,22 +54,22 @@ namespace FamilyBudgetApp.Windows
             }
         }
 
-        private void currentAmount_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            currentAmount_box.Focus();
-        }
+        //private void currentAmount_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    currentAmount_box.Focus();
+        //}
 
-        private void currentAmount_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(currentAmount_box.Text) && currentAmount_box.Text.Length > 0)
-            {
-                currentAmount_block.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                currentAmount_block.Visibility = Visibility.Visible;
-            }
-        }
+        //private void currentAmount_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(currentAmount_box.Text) && currentAmount_box.Text.Length > 0)
+        //    {
+        //        currentAmount_block.Visibility = Visibility.Collapsed;
+        //    }
+        //    else
+        //    {
+        //        currentAmount_block.Visibility = Visibility.Visible;
+        //    }
+        //}
 
         private void date_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -111,7 +110,7 @@ namespace FamilyBudgetApp.Windows
         }
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(goalAmount_box.Text) || string.IsNullOrWhiteSpace(currentAmount_box.Text) ||
+            if (string.IsNullOrWhiteSpace(goalAmount_box.Text) || 
                 string.IsNullOrWhiteSpace(date_picker.Text) || string.IsNullOrWhiteSpace(description_box.Text))
             {
                 MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -123,13 +122,13 @@ namespace FamilyBudgetApp.Windows
                 MessageBox.Show("Iznos cilja mora biti broj.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (!double.TryParse(currentAmount_box.Text, out double currentAmount))
-            {
-                MessageBox.Show("Trenutni iznos mora biti broj.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            //if (!double.TryParse(currentAmount_box.Text, out double currentAmount))
+            //{
+            //    MessageBox.Show("Trenutni iznos mora biti broj.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
             GoalAmount = goalAmount;
-            CurrentAmount = currentAmount;
+           // CurrentAmount = currentAmount;
             TargetDate = date_picker.SelectedDate.Value;
             Description = description_box.Text;  
 

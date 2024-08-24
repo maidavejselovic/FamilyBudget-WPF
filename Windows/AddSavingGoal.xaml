@@ -5,26 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FamilyBudgetApp.Windows"
         mc:Ignorable="d"
-        Title="AddSavingGoal" Height="350" Width="400">
-    <Grid>
+        Title="AddSavingGoal" Height="280" Width="350">
+    <Grid Background="#dfeeed" >
         <StackPanel Grid.Row="0" Margin="40 20 40 0">
 
             <TextBlock Text="Dodajte cilj uštede" Margin="0 10 0 10" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="20" TextAlignment="Center"  />
-            <Border Width="200" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
+            <Border Width="200" Background="white" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
                 <Grid >
-                    <TextBlock x:Name="goalAmount_block" Text="Iznos koji zelite da ustedite" Background="#f9fcfb" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="goalAmount_MouseDown"/>
+                    <TextBlock x:Name="goalAmount_block" Text="Iznos koji želite da uštedite"  Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="goalAmount_MouseDown"/>
                     <TextBox x:Name="goalAmount_box" FontSize="12" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" TextChanged="goalAmount_TextChanged"/>
                 </Grid>
             </Border>
-            <Border Width="200" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
+            <!--<Border Width="200" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
                 <Grid >
                     <TextBlock x:Name="currentAmount_block" Text="Trenutni iznos koji imate " Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="currentAmount_MouseDown"  />
                     <TextBox x:Name="currentAmount_box" FontSize="12" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" TextChanged="currentAmount_TextChanged"/>
                 </Grid>
-            </Border>
-            <Border Width="200" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
+            </Border>-->
+            <Border Width="200" Background="white" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
                 <Grid>
-                    <TextBlock x:Name="date_block" Text="Datum do kad zelite da ustedite" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="date_MouseDown" Visibility="Visible"/>
+                    <TextBlock x:Name="date_block" Text="Datum do kad želite da uštedite" Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="date_MouseDown" Visibility="Visible"/>
                     <DatePicker x:Name="date_picker" FontSize="12" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" 
                                 SelectedDateChanged="date_SelectedDateChanged" 
                                 Visibility="Collapsed"
@@ -33,9 +33,9 @@
                                 DisplayDateEnd="{Binding MaxDate}"/>
                 </Grid>
             </Border>
-            <Border Width="200" Background="#f9fcfb" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
+            <Border Width="200" Background="white" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="25" Margin="5" Opacity="0.7">
                 <Grid>
-                    <TextBlock x:Name="description_block" Text="Svrha stednje " Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="description_MouseDown" Visibility="Visible" />
+                    <TextBlock x:Name="description_block" Text="Svrha štednje " Foreground="#5eac9c" FontSize="12" FontWeight="DemiBold" Margin="4" MouseDown="description_MouseDown" Visibility="Visible" />
                     <TextBox x:Name="description_box" FontSize="12" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" TextChanged="description_TextChanged"/>
                 </Grid>
             </Border>

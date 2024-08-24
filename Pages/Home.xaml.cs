@@ -74,102 +74,119 @@ namespace FamilyBudgetApp.Pages
 
         private void LoadAllData()
         {
-            List<Expense> expenses = DatabaseManager.GetExpensesForMember(_member.id);
-            List<Income> incomes = DatabaseManager.GetIncomesForMember(_member.id);
-
-            var combinedList = expenses.Select(expense => new
+            string errorMessage;
+            if (_member.familyId != null)
             {
-                Date = expense.date,
-                Description = expense.description,
-                Amount = -expense.amount, // Dodavanje minusa ispred iznosa
-                Category = expense.category, // Dodajte kategoriju
-                Type = "Trošak"
-            })
-            .Concat(incomes.Select(income => new
-            {
-                Date = income.date,
-                Description = income.description,
-                Amount = income.amount,
-                Category = income.category, // Dodajte kategoriju
-                Type = "Prihod"
-            }))
-            .OrderBy(item => item.Date)
-            .ToList();
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
-            transactionsListView.ItemsSource = combinedList;
+                List<Expense> expenses = DatabaseManager.GetExpensesForMember(familyId);
+                List<Income> incomes = DatabaseManager.GetIncomesForMember(familyId);
+
+                var combinedList = expenses.Select(expense => new
+                {
+                    Date = expense.date,
+                    Description = expense.description,
+                    Amount = -expense.amount, // Dodavanje minusa ispred iznosa
+                    Category = expense.category, // Dodajte kategoriju
+                    Type = "Trošak"
+                })
+                .Concat(incomes.Select(income => new
+                {
+                    Date = income.date,
+                    Description = income.description,
+                    Amount = income.amount,
+                    Category = income.category, // Dodajte kategoriju
+                    Type = "Prihod"
+                }))
+                .OrderBy(item => item.Date)
+                .ToList();
+
+                transactionsListView.ItemsSource = combinedList;
+            }
         }
 
 
         private void LoadFilteredData(string category)
         {
-            List<Expense> expenses = DatabaseManager.GetExpensesByCategory(_member.id, category);
-            List<Income> incomes = DatabaseManager.GetIncomesByCategory(_member.id, category);
-
-            var combinedList = expenses.Select(expense => new
+            string errorMessage;
+            if (_member.familyId != null)
             {
-                Date = expense.date,
-                Description = expense.description,
-                Amount = -expense.amount, // minus ispred iznosa
-                Category = category,
-                Type = "Trošak"
-            })
-            .Concat(incomes.Select(income => new
-            {
-                Date = income.date,
-                Description = income.description,
-                Amount = income.amount,
-                Category = category,
-                Type = "Prihod"
-            }))
-            .OrderByDescending(item => item.Date)
-            .ToList();
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
-            transactionsListView.ItemsSource = combinedList;
+                List<Expense> expenses = DatabaseManager.GetExpensesByCategory(familyId, category);
+                List<Income> incomes = DatabaseManager.GetIncomesByCategory(familyId, category);
+
+                var combinedList = expenses.Select(expense => new
+                {
+                    Date = expense.date,
+                    Description = expense.description,
+                    Amount = -expense.amount, // minus ispred iznosa
+                    Category = category,
+                    Type = "Trošak"
+                })
+                .Concat(incomes.Select(income => new
+                {
+                    Date = income.date,
+                    Description = income.description,
+                    Amount = income.amount,
+                    Category = category,
+                    Type = "Prihod"
+                }))
+                .OrderByDescending(item => item.Date)
+                .ToList();
+
+                transactionsListView.ItemsSource = combinedList;
+            }
         }
         private void LoadChartData()
         {
-            int memberId = _member.id; // Koristite _member.id umesto hardkodiranja 1
-
-            // Uzimanje svih kategorija za datog člana
-            List<string> categories = DatabaseManager.GetCategoriesForMember(memberId);
-
-            // Uzimanje ukupnih troškova po kategorijama
-            SeriesCollection expensesSeries = new SeriesCollection();
-            foreach (string category in categories)
+            // int memberId = _member.id;
+            string errorMessage;
+            if (_member.familyId != null)
             {
-                List<Expense> expenses = DatabaseManager.GetExpensesByCategory(memberId, category);
-                double totalExpense = expenses.Sum(e => e.amount);
-                expensesSeries.Add(new PieSeries
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
+
+
+                // Uzimanje svih kategorija za datog člana
+                List<string> categories = DatabaseManager.GetCategoriesForMember(familyId);
+
+                // Uzimanje ukupnih troškova po kategorijama
+                SeriesCollection expensesSeries = new SeriesCollection();
+                foreach (string category in categories)
                 {
-                    Title = category,
-                    Values = new ChartValues<double> { totalExpense },
-                    DataLabels = true,
-                    LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
-                });
-            }
+                    List<Expense> expenses = DatabaseManager.GetExpensesByCategory(familyId, category);
+                    double totalExpense = expenses.Sum(e => e.amount);
+                    expensesSeries.Add(new PieSeries
+                    {
+                        Title = category,
+                        Values = new ChartValues<double> { totalExpense },
+                        DataLabels = true,
+                        LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
+                    });
+                }
 
-            // Uzimanje ukupnih prihoda po kategorijama
-            SeriesCollection incomesSeries = new SeriesCollection();
-            foreach (string category in categories)
-            {
-                List<Income> incomes = DatabaseManager.GetIncomesByCategory(memberId, category);
-                double totalIncome = incomes.Sum(i => i.amount);
-                incomesSeries.Add(new PieSeries
+                // Uzimanje ukupnih prihoda po kategorijama
+                SeriesCollection incomesSeries = new SeriesCollection();
+                foreach (string category in categories)
                 {
-                    Title = category,
-                    Values = new ChartValues<double> { totalIncome },
-                    DataLabels = true,
-                    LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
-                });
+                    List<Income> incomes = DatabaseManager.GetIncomesByCategory(familyId, category);
+                    double totalIncome = incomes.Sum(i => i.amount);
+                    incomesSeries.Add(new PieSeries
+                    {
+                        Title = category,
+                        Values = new ChartValues<double> { totalIncome },
+                        DataLabels = true,
+                        LabelPoint = chartPoint => chartPoint.Participation > 0 ? $"{chartPoint.Participation:P}" : string.Empty
+                    });
+                }
+
+                // Postavljanje serija za troškove grafikona
+                expensesPieChart.Series = expensesSeries;
+
+                // Postavljanje serija za prihode grafikona
+                incomesPieChart.Series = incomesSeries;
             }
-
-            // Postavljanje serija za troškove grafikona
-            expensesPieChart.Series = expensesSeries;
-
-            // Postavljanje serija za prihode grafikona
-            incomesPieChart.Series = incomesSeries;
         }
-
 
     }
 
