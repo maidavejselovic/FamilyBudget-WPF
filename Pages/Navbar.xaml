@@ -36,7 +36,7 @@
                 <LineBreak/>
                 <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_MyBudget_Click">Moj budžet</Hyperlink>
                 <LineBreak/>
-                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_SavingsGoals_Click">Ciljevi stednje</Hyperlink>
+                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_SavingsGoals_Click">Ciljevi štednje</Hyperlink>
             </TextBlock>
         </StackPanel>
 

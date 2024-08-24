@@ -102,7 +102,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="Udeo po clanovima" Binding="{Binding description}" Width="*"/>
+                                <!--<DataGridTextColumn Header="Udeo po clanovima" Binding="{Binding description}" Width="*"/>-->
 
                             </DataGrid.Columns>
                             

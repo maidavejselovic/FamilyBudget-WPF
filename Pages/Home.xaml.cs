@@ -56,8 +56,14 @@ namespace FamilyBudgetApp.Pages
         }
         private void LoadCategories()
         {
-            var categories = DatabaseManager.GetCategoriesForMember(_member.id);
-            categoryComboBox.ItemsSource = categories;
+            string errorMessage;
+            if (_member.familyId != null)
+            {
+                int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
+
+                var categories = DatabaseManager.GetCategoriesForFamily(familyId);
+                categoryComboBox.ItemsSource = categories;
+            }
         }
 
         private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -79,15 +85,15 @@ namespace FamilyBudgetApp.Pages
             {
                 int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
-                List<Expense> expenses = DatabaseManager.GetExpensesForMember(familyId);
-                List<Income> incomes = DatabaseManager.GetIncomesForMember(familyId);
+                List<Expense> expenses = DatabaseManager.GetExpensesForFamily(familyId);
+                List<Income> incomes = DatabaseManager.GetIncomesForFamily(familyId);
 
                 var combinedList = expenses.Select(expense => new
                 {
                     Date = expense.date,
                     Description = expense.description,
                     Amount = -expense.amount, // Dodavanje minusa ispred iznosa
-                    Category = expense.category, // Dodajte kategoriju
+                    Category = expense.category, 
                     Type = "Trošak"
                 })
                 .Concat(incomes.Select(income => new
@@ -95,7 +101,7 @@ namespace FamilyBudgetApp.Pages
                     Date = income.date,
                     Description = income.description,
                     Amount = income.amount,
-                    Category = income.category, // Dodajte kategoriju
+                    Category = income.category,
                     Type = "Prihod"
                 }))
                 .OrderBy(item => item.Date)
@@ -148,13 +154,13 @@ namespace FamilyBudgetApp.Pages
 
 
                 // Uzimanje svih kategorija za datog člana
-                List<string> categories = DatabaseManager.GetCategoriesForMember(familyId);
+                List<string> categories = DatabaseManager.GetCategoriesForFamily(familyId);
 
                 // Uzimanje ukupnih troškova po kategorijama
                 SeriesCollection expensesSeries = new SeriesCollection();
                 foreach (string category in categories)
                 {
-                    List<Expense> expenses = DatabaseManager.GetExpensesByCategory(familyId, category);
+                    List<Expense> expenses = DatabaseManager.GetExpensesByCategoryForFamily(familyId, category);
                     double totalExpense = expenses.Sum(e => e.amount);
                     expensesSeries.Add(new PieSeries
                     {
@@ -169,7 +175,7 @@ namespace FamilyBudgetApp.Pages
                 SeriesCollection incomesSeries = new SeriesCollection();
                 foreach (string category in categories)
                 {
-                    List<Income> incomes = DatabaseManager.GetIncomesByCategory(familyId, category);
+                    List<Income> incomes = DatabaseManager.GetIncomesByCategoryForFamily(familyId, category);
                     double totalIncome = incomes.Sum(i => i.amount);
                     incomesSeries.Add(new PieSeries
                     {

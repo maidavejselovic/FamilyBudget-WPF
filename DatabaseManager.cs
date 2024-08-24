@@ -209,7 +209,41 @@ namespace FamilyBudgetApp
                 return null;
             }
         }
-       
+        public static List<Expense> GetExpensesForFamily(int familyId)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.Expenses
+                                  .Where(e => e.Member.familyId == familyId)
+                                  .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Logovanje greške ako je potrebno
+                return new List<Expense>();
+            }
+        }
+        public static List<Income> GetIncomesForFamily(int familyId)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.Incomes
+                                  .Where(e => e.Member.familyId == familyId)
+                                  .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Logovanje greške ako je potrebno
+                return new List<Income>();
+            }
+        }
+
         public static List<Expense> GetExpensesForMember(int memberId)
         {
             try
@@ -571,7 +605,78 @@ namespace FamilyBudgetApp
                 return new List<Income>();
             }
         }
-        public static List<string> GetCategoriesForMember(int memberId)
+        public static List<Expense> GetExpensesByCategoryForFamily(int familyId, string category)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.Expenses
+                                  .Where(e => e.Member.familyId == familyId && e.category == category)
+                                  .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return new List<Expense>();
+            }
+        }
+        public static List<Income> GetIncomesByCategoryForFamily(int familyId, string category)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.Incomes
+                                  .Where(i => i.Member.familyId == familyId && i.category == category)
+                                  .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return new List<Income>();
+            }
+        }
+
+        //public static List<string> GetCategoriesForMember(int memberId)
+        //{
+        //    List<string> categories = new List<string>();
+
+        //    try
+        //    {
+        //        using (var context = new budgetEntities())
+        //        {
+        //            // Dodaj sve jedinstvene kategorije troškova
+        //            var expenseCategories = context.Expenses
+        //                .Where(e => e.memberId == memberId)
+        //                .Select(e => e.category)
+        //                .Distinct()
+        //                .ToList();
+        //            categories.AddRange(expenseCategories);
+
+        //            // Dodaj sve jedinstvene kategorije prihoda
+        //            var incomeCategories = context.Incomes
+        //                .Where(i => i.memberId == memberId)
+        //                .Select(i => i.category)
+        //                .Distinct()
+        //                .ToList();
+        //            categories.AddRange(incomeCategories);
+
+        //            // Ukloni duplikate (u slučaju da isti naziv kategorije postoji u oba seta)
+        //            categories = categories.Distinct().ToList();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Rukovanje greškom, npr. logovanje greške
+        //        Debug.WriteLine("Greška prilikom preuzimanja kategorija: " + ex.Message);
+        //    }
+
+        //    return categories;
+        //}
+        public static List<string> GetCategoriesForFamily(int familyId)
         {
             List<string> categories = new List<string>();
 
@@ -579,17 +684,17 @@ namespace FamilyBudgetApp
             {
                 using (var context = new budgetEntities())
                 {
-                    // Dodaj sve jedinstvene kategorije troškova
+                    // Dodaj sve jedinstvene kategorije troškova za članove porodice
                     var expenseCategories = context.Expenses
-                        .Where(e => e.memberId == memberId)
+                        .Where(e => e.Member.familyId == familyId)
                         .Select(e => e.category)
                         .Distinct()
                         .ToList();
                     categories.AddRange(expenseCategories);
 
-                    // Dodaj sve jedinstvene kategorije prihoda
+                    // Dodaj sve jedinstvene kategorije prihoda za članove porodice
                     var incomeCategories = context.Incomes
-                        .Where(i => i.memberId == memberId)
+                        .Where(i => i.Member.familyId == familyId)
                         .Select(i => i.category)
                         .Distinct()
                         .ToList();
