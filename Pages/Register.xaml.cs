@@ -55,7 +55,6 @@ namespace FamilyBudgetApp.Pages
             if (string.IsNullOrEmpty(firstName_box.Text) || string.IsNullOrEmpty(lastName_box.Text) ||
                 string.IsNullOrEmpty(email_box.Text) || string.IsNullOrEmpty(password_box.Password) ||
                 familyNameComboBox.SelectedItem == null)
-                
             {
                 MessageBox.Show("Molimo popunite sva polja.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

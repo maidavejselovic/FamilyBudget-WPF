@@ -37,16 +37,15 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                errorMessage = "Greška prilikom dodavanja porodice: " + ex.Message;
+                errorMessage = "Greska prilikom dodavanja porodice: " + ex.Message;
                 return false;
             }
         }
-
+        //prikazivanje svih porodica iz baze
         public static List<string> GetFamilyNames(out string errorMessage)
         {
             List<string> familyNames = new List<string>();
             errorMessage = string.Empty;
-
             try
             {
                 using (var context = new budgetEntities())
@@ -56,7 +55,7 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                errorMessage = "An error occurred: " + ex.Message;
+                errorMessage = "Greska " + ex.Message;
             }
 
             return familyNames;
@@ -76,7 +75,7 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                errorMessage = "An error occurred: " + ex.Message;
+                errorMessage = "Greska " + ex.Message;
             }
 
             return familyMembers;
@@ -98,7 +97,7 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                errorMessage = "An error occurred: " + ex.Message;
+                errorMessage = "Greska " + ex.Message;
             }
 
             return familyMembers;
@@ -153,7 +152,7 @@ namespace FamilyBudgetApp
                         errorMessage = "Porodica nije pronađena.";
                         return false;
                     }
-
+                                                                                                                                                                                                                                                                                                                            
                     var newMember = new Member
                     {
                         firstName = firstName,
@@ -186,7 +185,7 @@ namespace FamilyBudgetApp
                     var member = context.Members.SingleOrDefault(m => m.email == email);
                     if (member != null && BCrypt.Net.BCrypt.Verify(password, member.password))
                     {
-                        if (member.status == "Odobren")  // Dodaj proveru statusa ovde
+                        if (member.status == "Odobren") 
                         {
                             return member;
                         }
@@ -209,6 +208,59 @@ namespace FamilyBudgetApp
                 return null;
             }
         }
+        //odobravanje clana porodice
+        public static bool ApproveMember(int memberId)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    var member = context.Members.Find(memberId);
+                    if (member != null)
+                    {
+                        member.status = "Odobren";
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false; // Član porodice nije pronađen
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        //odbacivanje clana porodice, brisanje iz baze
+        public static bool RejectMember(int memberId)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    var member = context.Members.Find(memberId);
+                    if (member != null)
+                    {
+                        context.Entry(member).State = EntityState.Deleted;
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Član sa ID {memberId} nije pronađen za brisanje.");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Greška prilikom brisanja člana: {ex.Message}");
+                return false;
+            }
+        }
         public static List<Expense> GetExpensesForFamily(int familyId)
         {
             try
@@ -222,7 +274,6 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                // Logovanje greške ako je potrebno
                 return new List<Expense>();
             }
         }
@@ -239,11 +290,10 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                // Logovanje greške ako je potrebno
                 return new List<Income>();
             }
         }
-
+        //ukupni porodicni troskovi koje je dodao dati clana
         public static List<Expense> GetExpensesForMember(int memberId)
         {
             try
@@ -258,6 +308,21 @@ namespace FamilyBudgetApp
                 return new List<Expense>();
             }
         }
+        public static List<Income> GetIncomesForMember(int memberId)
+        {
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    return context.Incomes.Where(i => i.memberId == memberId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<Income>();
+            }
+        }
+        //troskovi po udelu clana 
         public static List<MemberExpense> GetMemberExpensesForMember(int memberId)
         {
             try
@@ -277,21 +342,6 @@ namespace FamilyBudgetApp
             }
         }
 
-        public static List<Income> GetIncomesForMember(int memberId)
-        {
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    return context.Incomes.Where(i => i.memberId == memberId).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new List<Income>();
-            }
-        }
-
         public static List<MemberIncome> GetMemberIncomesForMember(int memberId)
         {
             try
@@ -300,55 +350,16 @@ namespace FamilyBudgetApp
                 {
                     return context.MemberIncomes
                                   .Include("Income")
-                                 // .Include(mi => mi.Income) // Include related Income entity
                                   .Where(mi => mi.memberId == memberId)
                                   .ToList();
                 }
             }
             catch (Exception ex)
             {
-                // Handle exception (log or return empty list)
                 Console.WriteLine($"Error fetching member incomes for member: {ex.Message}");
                 return new List<MemberIncome>();
             }
         }
-
-        public static List<SavingGoal> GetSavingGoals(int memberId)
-        {
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    return context.SavingGoals.Where(i => i.memberId == memberId).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new List<SavingGoal>();
-            }
-        }
-        public static List<SavingGoal> GetFamilySavingGoals(int familyId, out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            List<SavingGoal> familySavingGoals = new List<SavingGoal>();
-
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    familySavingGoals = context.SavingGoals
-                        .Where(sg => sg.Member.familyId == familyId)
-                        .ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "An error occurred: " + ex.Message;
-            }
-
-            return familySavingGoals;
-        }
-
         public static double GetMemberBudget(int memberId, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -359,7 +370,7 @@ namespace FamilyBudgetApp
                     var memberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberId);
                     if (memberBudget != null)
                     {
-                        return memberBudget.budget ?? 0; // Provera za null vrednost
+                        return memberBudget.budget ?? 0;
                     }
                     else
                     {
@@ -385,7 +396,7 @@ namespace FamilyBudgetApp
                     var familyBudget = context.FamilyBudgets.FirstOrDefault(fb => fb.familyId == familyId);
                     if (familyBudget != null)
                     {
-                        return familyBudget.budget ?? 0; // Provera za null vrednost
+                        return familyBudget.budget ?? 0; 
                     }
                     else
                     {
@@ -400,23 +411,57 @@ namespace FamilyBudgetApp
                 return 0;
             }
         }
-        //funkcija za dohvatanje ciljeva stednje 
-        public static List<SavingGoal> GetSavingGoals(int memberId, out string errorMessage)
+        //dodavanje ciljeva stednje
+        public static bool AddSavingGoal(int memberId, double goalAmount, DateTime targetDate, string description, out string errorMessage)
         {
             errorMessage = string.Empty;
             try
             {
                 using (var context = new budgetEntities())
                 {
-                    return context.SavingGoals.Where(sg => sg.memberId == memberId).ToList();
+                    var newSavingGoal = new SavingGoal
+                    {
+                        memberId = memberId,
+                        goalAmount = goalAmount,
+                        targetDate = targetDate,
+                        description = description,
+                        status = "u toku..."
+                    };
+                    context.SavingGoals.Add(newSavingGoal);
+                    context.SaveChanges();
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                errorMessage = $"Greška prilikom dohvatanja ciljeva štednje: {ex.Message}";
-                return new List<SavingGoal>();
+                errorMessage = "Greška prilikom dodavanja cilja štednje: " + ex.Message;
+                return false;
             }
         }
+        //funkcija za dohvatanje porodicnih ciljeva stednje        
+        public static List<SavingGoal> GetFamilySavingGoals(int familyId, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            List<SavingGoal> familySavingGoals = new List<SavingGoal>();
+
+            try
+            {
+                using (var context = new budgetEntities())
+                {
+                    familySavingGoals = context.SavingGoals
+                        .Where(sg => sg.Member.familyId == familyId)
+                        .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Greska: " + ex.Message;
+            }
+
+            return familySavingGoals;
+        }
+
+        //promena statusa cilja stednje
         public static string CheckSavingsGoalStatus(SavingGoal goal, double currentBudget, out string newStatus)
         {
             newStatus = goal.status;
@@ -427,7 +472,7 @@ namespace FamilyBudgetApp
                 if (remainingAmount >= 0 && goal.status == "u toku...")
                 {
                     newStatus = "uspesno";
-                    
+
                 }
                 else if (remainingAmount < 0 && goal.status != "neuspesno")
                 {
@@ -463,117 +508,6 @@ namespace FamilyBudgetApp
             }
         }
 
-        public static bool AddSavingGoal(int memberId, double goalAmount, DateTime targetDate, string description, out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    var newSavingGoal = new SavingGoal
-                    {
-                        memberId = memberId,
-                        goalAmount = goalAmount,
-                       // currentAmount = currentAmount,
-                        targetDate = targetDate,
-                        description = description,
-                        status = "u toku..."
-                    };
-                    context.SavingGoals.Add(newSavingGoal);
-                    context.SaveChanges();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "Greška prilikom dodavanja cilja štednje: " + ex.Message;
-                return false;
-            }
-        }
-            public static bool ApproveMember(int memberId)
-            {
-                try
-                {
-                    using (var context = new budgetEntities())
-                    {
-                        var member = context.Members.Find(memberId);
-                        if (member != null)
-                        {
-                            member.status = "Odobren";
-                            context.SaveChanges();
-                            return true;
-                        }
-                        else
-                        {
-                            return false; // Član porodice nije pronađen
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Logika za rukovanje greškom, na primer, logovanje greške
-                    return false;
-                }
-            }
-
-
-        public static bool RejectMember(int memberId)
-        {
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    var member = context.Members.Find(memberId);
-                    if (member != null)
-                    {
-                        context.Entry(member).State = EntityState.Deleted;
-                        context.SaveChanges();
-                        return true;
-                    }
-                    else
-                    {
-                        // Logovanje da član nije pronađen
-                        Debug.WriteLine($"Član sa ID {memberId} nije pronađen za brisanje.");
-                        return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Logovanje greške
-                Debug.WriteLine($"Greška prilikom brisanja člana: {ex.Message}");
-                return false;
-            }
-        }
-
-
-        //public static List<(Member member, List<Income> incomes)> GetFamilyMembersWithIncomes(int familyId, out string errorMessage)
-        //{
-        //    errorMessage = string.Empty;
-        //    List<(Member, List<Income>)> familyMembersWithIncomes = new List<(Member, List<Income>)>();
-
-        //    try
-        //    {
-        //        using (var context = new budgetEntities())
-        //        {
-        //            var familyMembers = context.Members.Where(m => m.familyId == familyId).ToList();
-        //            foreach (var member in familyMembers)
-        //            {
-        //                var incomes = context.Incomes.Where(i => i.memberId == member.id).ToList();
-        //                familyMembersWithIncomes.Add((member, incomes));
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        errorMessage = "An error occurred: " + ex.Message;
-        //    }
-
-        //    return familyMembersWithIncomes;
-        //}
-
-
-
         public static List<Expense> GetExpensesByCategory(int memberId, string category)
         {
             try
@@ -585,7 +519,6 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                // Handle exception
                 return new List<Expense>();
             }
         }
@@ -640,42 +573,6 @@ namespace FamilyBudgetApp
             }
         }
 
-        //public static List<string> GetCategoriesForMember(int memberId)
-        //{
-        //    List<string> categories = new List<string>();
-
-        //    try
-        //    {
-        //        using (var context = new budgetEntities())
-        //        {
-        //            // Dodaj sve jedinstvene kategorije troškova
-        //            var expenseCategories = context.Expenses
-        //                .Where(e => e.memberId == memberId)
-        //                .Select(e => e.category)
-        //                .Distinct()
-        //                .ToList();
-        //            categories.AddRange(expenseCategories);
-
-        //            // Dodaj sve jedinstvene kategorije prihoda
-        //            var incomeCategories = context.Incomes
-        //                .Where(i => i.memberId == memberId)
-        //                .Select(i => i.category)
-        //                .Distinct()
-        //                .ToList();
-        //            categories.AddRange(incomeCategories);
-
-        //            // Ukloni duplikate (u slučaju da isti naziv kategorije postoji u oba seta)
-        //            categories = categories.Distinct().ToList();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Rukovanje greškom, npr. logovanje greške
-        //        Debug.WriteLine("Greška prilikom preuzimanja kategorija: " + ex.Message);
-        //    }
-
-        //    return categories;
-        //}
         public static List<string> GetCategoriesForFamily(int familyId)
         {
             List<string> categories = new List<string>();
@@ -768,19 +665,23 @@ namespace FamilyBudgetApp
                         memberId = memberId
                     };
                     context.Expenses.Add(newExpense);
+                    context.SaveChanges();  //Čuvanje troška da bi se dobio expenseId
 
                     int expenseId = newExpense.id;
 
+                    // Povezivanje troška sa svim udelima članova porodice
                     foreach (var memberExpense in memberExpenses)
                     {
-                        // Provera da li memberExpense pripada istom memberId kao i memberId u memberBudget
-                        if (memberExpense.memberId == memberId)
-                        {
-                            memberExpense.expenseId = expenseId;
-                            context.MemberExpenses.Add(memberExpense);
+                        // Dodela expenseId svim memberExpense objektima
+                        memberExpense.expenseId = expenseId;
+                        context.MemberExpenses.Add(memberExpense);
 
-                            // Dodavanje memberAmount na totalExpenses člana porodice
-                            memberBudget.totalExpenses += memberExpense.memberAmount;
+                        // Ažuriranje ukupnih troškova za svakog člana porodice
+                        var currentMemberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberExpense.memberId);
+                        if (currentMemberBudget != null)
+                        {
+                            currentMemberBudget.totalExpenses += memberExpense.memberAmount;
+                            currentMemberBudget.budget = currentMemberBudget.totalIncome - currentMemberBudget.totalExpenses;
                         }
                     }
 
@@ -788,7 +689,7 @@ namespace FamilyBudgetApp
                     familyBudget.totalExpenses += amount;
                     familyBudget.budget = familyBudget.totalIncome - familyBudget.totalExpenses;
 
-                    // Ažuriranje budžeta člana porodice
+                    // Ažuriranje budžeta člana porodice koji je kreirao trošak
                     memberBudget.budget = memberBudget.totalIncome - memberBudget.totalExpenses;
 
                     context.SaveChanges();
@@ -802,7 +703,6 @@ namespace FamilyBudgetApp
                 return false;
             }
         }
-
         public static bool AddIncomeAndMemberIncomes(int memberId, double amount, string category, DateTime date, string description, List<MemberIncome> memberIncomes, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -858,26 +758,30 @@ namespace FamilyBudgetApp
                     };
                     context.Incomes.Add(newIncome);
 
+                    // Čuvanje prihoda da bi se dobio incomeId
+                    context.SaveChanges();
                     int incomeId = newIncome.id;
 
+                    // Povezivanje prihoda sa svim udelima članova porodice
                     foreach (var memberIncome in memberIncomes)
                     {
-                        // Provera da li memberIncome pripada istom memberId kao i memberId u memberBudget
-                        if (memberIncome.memberId == memberId)
-                        {
-                            memberIncome.incomeId = incomeId;
-                            context.MemberIncomes.Add(memberIncome);
+                        // Dodela incomeId svim memberIncome objektima
+                        memberIncome.incomeId = incomeId;
+                        context.MemberIncomes.Add(memberIncome);
 
-                            // Dodavanje memberAmount na totalIncomes člana porodice
-                            memberBudget.totalIncome += memberIncome.memberAmount;
+                        // Ažuriranje ukupnih prihoda za svakog člana porodice
+                        var currentMemberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberIncome.memberId);
+                        if (currentMemberBudget != null)
+                        {
+                            currentMemberBudget.totalIncome += memberIncome.memberAmount;
+                            currentMemberBudget.budget = currentMemberBudget.totalIncome - currentMemberBudget.totalExpenses;
                         }
                     }
-
                     // Ažuriranje budžeta porodice
                     familyBudget.totalIncome += amount;
                     familyBudget.budget = familyBudget.totalIncome - familyBudget.totalExpenses;
 
-                    // Ažuriranje budžeta člana porodice
+                    // Ažuriranje budžeta člana porodice koji je kreirao prihod
                     memberBudget.budget = memberBudget.totalIncome - memberBudget.totalExpenses;
 
                     context.SaveChanges();
@@ -887,82 +791,7 @@ namespace FamilyBudgetApp
             }
             catch (Exception ex)
             {
-                errorMessage = "Greška prilikom dodavanja troška i udeljenih troškova: " + ex.Message;
-                return false;
-            }
-        }
-
-
-
-        public static bool AddIncome(int memberId, double amount, string category, DateTime date, string description, out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            try
-            {
-                using (var context = new budgetEntities())
-                {
-                    // Pronalaženje ili dodavanje člana porodice
-                    var member = context.Members.Find(memberId);
-                    if (member == null)
-                    {
-                        errorMessage = "Član porodice nije pronađen.";
-                        return false;
-                    }
-
-                    // Pronalaženje ili dodavanje budžeta porodice
-                    var familyBudget = context.FamilyBudgets.FirstOrDefault(fb => fb.familyId == member.familyId);
-                    if (familyBudget == null)
-                    {
-                        familyBudget = new FamilyBudget
-                        {
-                            familyId = member.familyId,
-                            totalIncome = 0,
-                            totalExpenses = 0,
-                            budget = 0
-                        };
-                        context.FamilyBudgets.Add(familyBudget);
-                    }
-
-                    // Pronalaženje ili dodavanje budžeta člana porodice
-                    var memberBudget = context.MemberBudgets.FirstOrDefault(mb => mb.memberId == memberId);
-                    if (memberBudget == null)
-                    {
-                        memberBudget = new MemberBudget
-                        {
-                            memberId = memberId,
-                            totalIncome = 0,
-                            totalExpenses = 0,
-                            budget = 0
-                        };
-                        context.MemberBudgets.Add(memberBudget);
-                    }
-
-                    // Kreiranje novog prihoda
-                    var newIncome = new Income
-                    {
-                        amount = amount,
-                        category = category,
-                        date = date,
-                        description = description,
-                        memberId = memberId
-                    };
-                    context.Incomes.Add(newIncome);
-
-                    // Ažuriranje budžeta porodice
-                    familyBudget.totalIncome += amount;
-                    familyBudget.budget = familyBudget.totalIncome - familyBudget.totalExpenses;
-
-                    // Ažuriranje budžeta člana porodice
-                    memberBudget.totalIncome += amount;
-                    memberBudget.budget = memberBudget.totalIncome - memberBudget.totalExpenses;
-
-                    context.SaveChanges();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "Greška prilikom dodavanja prihoda: " + ex.Message;
+                errorMessage = "Greška prilikom dodavanja prihoda i udeljenih prihoda: " + ex.Message;
                 return false;
             }
         }

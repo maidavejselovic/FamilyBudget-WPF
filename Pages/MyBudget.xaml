@@ -26,10 +26,7 @@
                         <TextBlock x:Name="TotalBudgetTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                 </StackPanel>
-
-                <!--<TextBlock Text="Odaberite kategoriju" Margin="15 25 0 0" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="13" TextAlignment="Left"/>
-                <ComboBox x:Name="categoryComboBox" SelectionChanged="CategoryComboBox_SelectionChanged" Width="200" Margin="15 5 10 15" HorizontalAlignment="Left"/>-->
-
+                
                 <ListView x:Name="transactionsListView" Margin="10" Background="#dfeeed" BorderThickness="0">
                     <ListView.ItemTemplate>
                         <DataTemplate>

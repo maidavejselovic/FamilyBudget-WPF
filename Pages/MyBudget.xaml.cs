@@ -26,8 +26,7 @@ namespace FamilyBudgetApp.Pages
             InitializeComponent();
             _member = member;
             LoadNavbar();
-            //LoadCategories();
-            LoadAllData(); // Učitaj sve transakcije na početku
+            LoadAllData();
             LoadTotalBudget();
         }
 
@@ -37,11 +36,6 @@ namespace FamilyBudgetApp.Pages
             NavbarFrame.Content = navbar;
         }
 
-        //private void LoadCategories()
-        //{
-        //    var categories = DatabaseManager.GetCategoriesForMember(_member.id);
-        //    categoryComboBox.ItemsSource = categories;
-        //}
         private void LoadTotalBudget()
         {
             string errorMessage;
@@ -49,23 +43,13 @@ namespace FamilyBudgetApp.Pages
 
             TotalBudgetTextBlock.Text = $"Moj budžet: \n {budget} RSD";
         }
-        //private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (categoryComboBox.SelectedItem is string selectedCategory)
-        //    {
-        //        LoadFilteredData(selectedCategory);
-        //    }
-        //    else
-        //    {
-        //        LoadAllData(); // Ako ništa nije izabrano, učitaj sve transakcije
-        //    }
-        //}
 
         private void LoadAllData()
         {
-            List<Income> incomes = DatabaseManager.GetIncomesForMember(_member.id);
+            // List<Income> incomes = DatabaseManager.GetIncomesForMember(_member.id);
+            //List<Expense> expenses = DatabaseManager.GetExpensesForMember(_member.id);
+
             List<MemberIncome> memberIncomes = DatabaseManager.GetMemberIncomesForMember(_member.id);
-            List<Expense> expenses = DatabaseManager.GetExpensesForMember(_member.id);
             List<MemberExpense> memberExpenses = DatabaseManager.GetMemberExpensesForMember(_member.id);
 
             var combinedList = memberExpenses.Select(me => new
@@ -77,7 +61,6 @@ namespace FamilyBudgetApp.Pages
                 Type = "Trošak"
             })
             .Concat(memberIncomes.Select(mi => new
-
             {
                 Date = mi.Income.date,
                 Description = mi.Income.description,
@@ -87,33 +70,6 @@ namespace FamilyBudgetApp.Pages
             }))
            .OrderBy(item => item.Date)
            .ToList();
-
-            transactionsListView.ItemsSource = combinedList;
-        }
-
-        private void LoadFilteredData(string category)
-        {
-            List<Expense> expenses = DatabaseManager.GetExpensesByCategory(_member.id, category);
-            List<Income> incomes = DatabaseManager.GetIncomesByCategory(_member.id, category);
-
-            var combinedList = expenses.Select(expense => new
-            {
-                Date = expense.date,
-                Description = expense.description,
-                Amount = -expense.amount, // minus ispred iznosa
-                Category = category,
-                Type = "Trošak"
-            })
-            .Concat(incomes.Select(income => new
-            {
-                Date = income.date,
-                Description = income.description,
-                Amount = income.amount,
-                Category = category,
-                Type = "Prihod"
-            }))
-            .OrderBy(item => item.Date)
-            .ToList();
 
             transactionsListView.ItemsSource = combinedList;
         }

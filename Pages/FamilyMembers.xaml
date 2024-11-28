@@ -14,25 +14,15 @@
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Frame za navigaciju (opcionalno) -->
         <Frame Grid.Column="0" x:Name="NavbarFrame"/>
 
-        <!-- Panel sa podacima o članovima porodice -->
         <StackPanel Grid.Column="1" Background="#dfeeed">
             <TextBlock Text="Članovi vaše porodice" Margin="10" Foreground="#5eac9c" FontWeight="DemiBold" FontSize="20" TextAlignment="Center" />
 
-            <!-- TextBlock za prikaz poruke o čekanju -->
-            <TextBlock x:Name="pendingMessageTextBlock" Text="Čekate prihvatanje u porodicu." 
-                       FontSize="16" FontWeight="Bold" Foreground="Red"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Visibility="Collapsed" Margin="10 50 15 0"/>
-
-            <!-- DataGrid za prikaz članova porodice -->
             <DataGrid x:Name="incomeDataGrid" AutoGenerateColumns="False"
                       IsReadOnly="True" HeadersVisibility="Column"
                       Margin="15 30 15 0" RowHeight="35" Visibility="Visible">
                 <DataGrid.Columns>
-                    <!-- Kolona za ime -->
                     <DataGridTemplateColumn Header="Ime" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -41,7 +31,6 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Kolona za prezime -->
                     <DataGridTemplateColumn Header="Prezime" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -50,7 +39,6 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Kolona za status člana porodice i odobravanje/odbijanje -->
                     <DataGridTemplateColumn Header="Odobri/Odbij" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

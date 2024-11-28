@@ -40,7 +40,7 @@ namespace FamilyBudgetApp.Pages
 
         private void LoadNavbar()
         {
-             Navbar navbar = new Navbar(_member);
+            Navbar navbar = new Navbar(_member);
             NavbarFrame.Content = navbar;
         }
         private void LoadTotalFamilyBudget()
@@ -119,8 +119,8 @@ namespace FamilyBudgetApp.Pages
             {
                 int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
 
-                List<Expense> expenses = DatabaseManager.GetExpensesByCategory(familyId, category);
-                List<Income> incomes = DatabaseManager.GetIncomesByCategory(familyId, category);
+                List<Expense> expenses = DatabaseManager.GetExpensesByCategoryForFamily(familyId, category);
+                List<Income> incomes = DatabaseManager.GetIncomesByCategoryForFamily(familyId, category);
 
                 var combinedList = expenses.Select(expense => new
                 {
@@ -146,12 +146,10 @@ namespace FamilyBudgetApp.Pages
         }
         private void LoadChartData()
         {
-            // int memberId = _member.id;
             string errorMessage;
             if (_member.familyId != null)
             {
                 int familyId = _member.familyId.Value; // Eksplicitna konverzija nullable int u int
-
 
                 // Uzimanje svih kategorija za datog člana
                 List<string> categories = DatabaseManager.GetCategoriesForFamily(familyId);
@@ -193,7 +191,5 @@ namespace FamilyBudgetApp.Pages
                 incomesPieChart.Series = incomesSeries;
             }
         }
-
     }
-
 }

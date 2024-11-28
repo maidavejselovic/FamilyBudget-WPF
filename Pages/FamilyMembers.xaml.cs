@@ -26,7 +26,6 @@ namespace FamilyBudgetApp.Pages
             InitializeComponent();
             _member = member;
             LoadNavbar();
-            CheckMemberStatusAndLoadContent();
             LoadFamilyMembers();
         }
         private void LoadNavbar()
@@ -46,40 +45,19 @@ namespace FamilyBudgetApp.Pages
                 }
                 else
                 {
-                    // Ako nema greške, postavi članove porodice u izvor podataka za DataGrid
                     incomeDataGrid.ItemsSource = familyMembers;
                 }
             }
         }
-        private void CheckMemberStatusAndLoadContent()
-        {
-            if (_member.status == "na čekanju")
-            {
-                // Ako je korisnik na čekanju, prikažite poruku i sakrijte DataGrid
-                pendingMessageTextBlock.Text = "Prihvatanje u porodicu na čekanju.";
-                pendingMessageTextBlock.Visibility = Visibility.Visible;
-                incomeDataGrid.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                // Ako je korisnik odobren, učitajte članove porodice
-                pendingMessageTextBlock.Visibility = Visibility.Collapsed;
-                incomeDataGrid.Visibility = Visibility.Visible;
-                LoadFamilyMembers();
-            }
-        }
-
        
         private void ApproveButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             if (button?.CommandParameter is int memberId)
             {
-                // Pozovite funkciju za ažuriranje statusa u bazi podataka na "Odobren"
                 if (DatabaseManager.ApproveMember(memberId))
                 {
-                    // Osvežite prikaz u DataGrid-u
-                    RefreshDataGrid();
+                    LoadFamilyMembers();
                 }
                 else
                 {
@@ -93,11 +71,9 @@ namespace FamilyBudgetApp.Pages
             Button button = sender as Button;
             if (button?.CommandParameter is int memberId)
             {
-                // Pozovite funkciju za brisanje člana porodice iz baze podataka
                 if (DatabaseManager.RejectMember(memberId))
                 {
-                    // Osvežite prikaz u DataGrid-u
-                    RefreshDataGrid();
+                    LoadFamilyMembers();
                 }
                 else
                 {
@@ -105,12 +81,6 @@ namespace FamilyBudgetApp.Pages
                 }
             }
         }
-        private void RefreshDataGrid()
-        {
-            LoadFamilyMembers(); // Primer funkcije za osvežavanje podataka, prilagodite je vašem scenariju
-        }
-
-
     }
 }
 
