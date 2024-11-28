@@ -130,6 +130,34 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-        </Application.Resources>
+
+        <!-- Stil za dugme "Odjavi se" -->
+        <Style x:Key="logoutButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="#5eac9c" />
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#5eac9c"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#5eac9c" BorderThickness="1" Padding="{TemplateBinding Padding}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8f5f2"/>
+                    <Setter Property="Foreground" Value="#5eac9c"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
     </Application>
 

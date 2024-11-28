@@ -68,8 +68,9 @@ namespace FamilyBudgetApp.Pages
                 Category = mi.Income.category,
                 Type = "Prihod"
             }))
-           .OrderBy(item => item.Date)
+           .OrderByDescending(item => item.Date) // Sortiranje u opadajućem redosledu
            .ToList();
+
 
             transactionsListView.ItemsSource = combinedList;
         }

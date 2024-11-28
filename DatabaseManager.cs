@@ -322,7 +322,7 @@ namespace FamilyBudgetApp
                 return new List<Income>();
             }
         }
-        //troskovi po udelu clana 
+        //troškovi po udelu člana 
         public static List<MemberExpense> GetMemberExpensesForMember(int memberId)
         {
             try
@@ -471,18 +471,18 @@ namespace FamilyBudgetApp
             {
                 if (remainingAmount >= 0 && goal.status == "u toku...")
                 {
-                    newStatus = "uspesno";
+                    newStatus = "uspešno";
 
                 }
-                else if (remainingAmount < 0 && goal.status != "neuspesno")
+                else if (remainingAmount < 0 && goal.status != "neuspešno")
                 {
-                    newStatus = "neuspesno";
+                    newStatus = "neuspešno";
                 }
             }
             //ako nije prosao datum, ali sam vec dostigla ciljni iznos
             else if (remainingAmount >= 0 && goal.status == "u toku...")
             {
-                newStatus = "uspesno";
+                newStatus = "uspešno";
             }
 
             return null; // Nema poruke ako datum nije prošao i cilj nije postignut

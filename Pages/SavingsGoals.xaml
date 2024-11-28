@@ -35,10 +35,10 @@
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding status}" Value="uspesno">
+                                        <DataTrigger Binding="{Binding status}" Value="uspešno">
                                             <Setter Property="Background" Value="Green" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding status}" Value="neuspesno">
+                                        <DataTrigger Binding="{Binding status}" Value="neuspešno">
                                             <Setter Property="Background" Value="Red" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding status}" Value="u toku...">
@@ -67,10 +67,10 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding status}" Value="neuspesno">
+                                                    <DataTrigger Binding="{Binding status}" Value="neuspešno">
                                                         <Setter Property="Foreground" Value="Red" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding status}" Value="uspesno">
+                                                    <DataTrigger Binding="{Binding status}" Value="uspešno">
                                                         <Setter Property="Foreground" Value="Green" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding status}" Value="u toku...">

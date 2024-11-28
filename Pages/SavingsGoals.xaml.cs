@@ -148,8 +148,6 @@ namespace FamilyBudgetApp.Pages
             }).ToList();
         }
 
-
-
         private void AddSavingGoalsButton_Click(object sender, RoutedEventArgs e)
         {
             AddSavingGoal addSavingGoal = new AddSavingGoal(_member);

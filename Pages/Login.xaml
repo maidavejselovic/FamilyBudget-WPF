@@ -35,7 +35,7 @@
                     </Border>
                     <Border Width="320" BorderThickness="1" BorderBrush="#5eac9c" CornerRadius="5" Height="40" Margin="8 8 8 10" Opacity="0.7">
                         <Grid>
-                            <TextBlock x:Name="password_block" Text="Sifra " Foreground="#5eac9c" FontSize="15" FontWeight="DemiBold"  Margin="5 8 0 0" Width="300" MouseDown="password_block_MouseDown"/>
+                            <TextBlock x:Name="password_block" Text="Šifra " Foreground="#5eac9c" FontSize="15" FontWeight="DemiBold"  Margin="5 8 0 0" Width="300" MouseDown="password_block_MouseDown"/>
                             <PasswordBox x:Name="password_box" Background="Transparent" FontSize="15" BorderThickness="0" Width="300" VerticalAlignment="Center" PasswordChanged="password_box_PasswordChanged"/>
                         </Grid>
                     </Border>

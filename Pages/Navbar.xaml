@@ -42,9 +42,8 @@
 
         <!-- Logout -->
         <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0 0 0 15">
-            <TextBlock HorizontalAlignment="Center">
-                <Hyperlink Foreground="White" FontWeight="DemiBold" FontSize="15" TextDecorations="None" Click="Hyperlink_Logout_Click">Logout</Hyperlink>
-            </TextBlock>
+            <Button Content="Odjavi se" Style="{StaticResource logoutButtonStyle}" Click="Hyperlink_Logout_Click"/>
         </StackPanel>
+
     </Grid>
 </Page>
